@@ -258,4 +258,65 @@ int longestBeautifulSubstring(string word) {
 }
 
 
+// 1151 medium 01数组，可以任意交换位置，问最少的交换次数，使得1聚合在一起
+// 假设1有k个，聚合在一起，说明是一个大小为k的窗口，那么就是统计窗口中有多少0
+// 即一个固定长度窗口中最少的0是多少，或者说1最多是多少。
+int minSwaps(vector<int>& data) {
+    int n = data.size();
+    int k = accumulate(data.begin(), data.end(), 0);
+    int curSum = accumulate(data.begin(), data.begin() + k, 0);
+    int cnt1 = curSum;
+    for (int l = 1; l <= n - k; ++l) {
+        curSum += data[l + k - 1] - data[l - 1];
+        cnt1 = max(cnt1, curSum);
+    }
+    return k - cnt1;
+}
 
+
+// 159 medium 至多包含两个不同字符的最长子串 英文字母
+// 即滑动窗口中，字符数量至多为2，滑动窗口的最大长度
+// 肯定不能l一次一次试，那就用一个哈希表记录s[l]在滑动窗口中的最远位置
+int lengthOfLongestSubstringTwoDistinct(string s) {
+    unordered_map<char,int> pos;
+    int ret = 0, n = s.size();
+    for (int l = 0, r = 0; r < n; ++r) {
+        pos[s[r]] = r;
+        if (pos.size() > 2) {
+            l = pos[s[l]]  + 1;
+            if (l == r) { // abaac 还是得保留b之后的a 去掉b
+                for (auto [ch, idx] : pos) { // 找到b
+                    if (ch != s[l - 1] && ch != s[r]) {
+                        pos.erase(ch);
+                        l = idx + 1;
+                        break;
+                    }
+                }
+            } else { // aabbc
+                pos.erase(s[l - 1]);
+            }
+        }
+        ret = max(ret, r - l + 1);
+    }
+    return ret;
+}
+
+// 1100 medium 所有长度为 k 且不含重复字符的子串，求子串的数目
+int numKLenSubstrNoRepeats(string s, int k) {
+    unordered_map<char,int> pos;
+    int n = s.size(), cnt = 0;
+    for (int l = 0, r = 0; r < n; ++r) {
+        if (pos.count(s[r]) > 0) {
+            l = pos[s[r]] + 1;
+            if (l == r + 1) --l;
+            pos.clear();
+        }
+        pos[s[r]] = r;
+        if (pos.size() > k) {
+            pos.erase(s[l++]);
+        } else if (pos.size() == k) {
+            ++cnt;
+        }
+    }
+    return cnt;
+}
