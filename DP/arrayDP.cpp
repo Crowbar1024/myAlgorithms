@@ -88,27 +88,7 @@ int minSumAndIndex(vector<int>& a, int k) {
 }
 
 
-// 974 medium 和可被k整除的子串数量
-// (presum[r]-presum[l-1])%K = 0 --> presum[r]%K = presum[l-1]%K
-// 转换为找出所有 presum[]%K 中有多少对相等的pair
-// 需要注意presum=0的情况，因为pre[i]=pre[j]=pre[k]=0，虽然可以组成3对
-// 但忽视了一个情况，就是之间的片段也是0，所以n个0，除了组合数之外，还要+n（1为特殊情况）
-int subarraysDivByK(vector<int>& nums, int k) {
-    unordered_map<int, int> m;
-    int res = 0, sum = 0;
-    for (const int& n : nums) {
-        int tmp = sum+n;
-        // -1%5=4 -4%5=1 -5&5=0 负数取模 本质还是向下取整
-        if (tmp < 0) sum = tmp-(tmp-k+1)/k*k;
-        else sum = tmp%k;
-        if (sum == 0) ++res;
-        m[sum]++;
-    }
-    for (const auto& [n,cnt] : m) {
-        res += cnt*(cnt-1)/2;  //组合数
-    }
-    return res;
-}
+
 
 
 

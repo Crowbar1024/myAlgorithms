@@ -41,6 +41,67 @@ vector<int> productExceptSelf(vector<int>& nums) {
 }
 
 
+// 560 medium 整数数组nums（有负数），求所有的字串之和为k的连续子串的个数
+// preSum[i]-preSum[j-1]=k
+// 对于每一个preSum[i]，如果前面有多个符合题意的preSum[j-1]，cnt就可以加上这个数量
+int subarraySum(vector<int>& nums, int k) {
+    unordered_map<int, int> sumPos;
+    sumPos[0] = 1;  // 和为0的情况初始化为1，即前0个数之和
+    int preSum = 0, ret = 0;
+    for (int& num : nums) {
+        preSum += num;
+        if (sumPos.count(preSum-k)) {
+            ret += sumPos[preSum-k];
+        }
+        sumPos[preSum] += 1;
+    }
+    return ret;
+}
+
+
+// 523 medium 判断正整数数组是否含有同时满足下述条件的连续子数组：
+// 子数组大小至少为 2 ，且子数组元素总和为 k 的倍数（0 始终视为 k 的一个倍数）。保证全部和在int范围。
+// 因为是判断，可以记录<presum, idx>，idx取最早的
+// presum[i] - presum[j-1] = n*k
+// presum[i]%k = presum[j]%k  因此只需要计算每个下标对应的前缀和%k
+bool checkSubarraySum(vector<int>& nums, int k) {
+    int n = nums.size(), preSum = 0, ret = 0;
+    if (n < 2) return false;
+    unordered_map<int, int> sumEarliestPos;
+    sumEarliestPos[0] = -1;  // 和为0
+    for (int i = 0; i < n; ++i) {
+        preSum = (preSum + nums[i]) % k;
+        if (sumEarliestPos.count(preSum) && sumEarliestPos[preSum] <= i - 2) { // j-1
+            return true;
+        } else if (!sumEarliestPos.count(preSum)) {
+            sumEarliestPos[preSum] = i;
+        }
+    }
+    return false;
+}
+// 974 medium 523进阶 整数数组（有负数），求和可被k整除的子串数量 即找出所有 presum%K 中有多少对相等的pair
+// 需要注意presum=0的情况，假设有三个不同的{i,j,k}，有pre[i]=pre[j]=pre[k]=0，虽然可以组成3对
+// 但忽视了一个情况，就是之间的片段[i+1,j],[j+1,k],[i+1,k]也是0，所以n个0，除了组合数之外，还要+n（1为特殊情况）
+int subarraysDivByK(vector<int>& nums, int k) {
+    unordered_map<int, int> sumCnt;
+    int ret = 0, sum = 0;
+    for (int n : nums) {
+        int tmp = sum + n;
+        // 负数在Cint上取模是和正数关于原点中心对称（且为负数），但我这里需要和正数取模的向下取整保持一致
+        if (tmp < 0) sum = tmp-(tmp-k+1)/k*k;
+        else sum = tmp%k;
+        if (sum == 0) ++ret; // 先把presum为0的全统计了
+        sumCnt[sum]++;
+    }
+    for (auto [n, cnt] : sumCnt) {
+        ret += cnt*(cnt-1)/2;  //组合数
+    }
+    return ret;
+}
+
+
+
+
 // 152 medium 数组中乘积最大的非空连续子串，并返回该子数组所对应的乘积。
 // dp，两个数组，一个最大，一个最小，然后状态压缩
 int maxProduct(vector<int>& nums) {

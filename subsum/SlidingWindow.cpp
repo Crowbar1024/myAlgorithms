@@ -302,21 +302,23 @@ int lengthOfLongestSubstringTwoDistinct(string s) {
 }
 
 // 1100 medium 所有长度为 k 且不含重复字符的子串，求子串的数目
+// 使用一个数组记录每个元素的出现次数，每次移动时，减去上一次的头，加上这次的尾
 int numKLenSubstrNoRepeats(string s, int k) {
-    unordered_map<char,int> pos;
-    int n = s.size(), cnt = 0;
-    for (int l = 0, r = 0; r < n; ++r) {
-        if (pos.count(s[r]) > 0) {
-            l = pos[s[r]] + 1;
-            if (l == r + 1) --l;
-            pos.clear();
-        }
-        pos[s[r]] = r;
-        if (pos.size() > k) {
-            pos.erase(s[l++]);
-        } else if (pos.size() == k) {
-            ++cnt;
-        }
+    int n = s.size(), sum = 0;
+    if (k > n) return 0;
+    vector<int> cnt(26, 0);
+    for (int i = 0; i < k; ++i) {
+        if (cnt[s[i] - 'a'] == 0) ++sum;
+        cnt[s[i] - 'a'] += 1;
     }
-    return cnt;
+    int ret = (sum == k) ? 1 : 0;
+    for (int l = 1; l <= n - k; ++l) {
+        int r = l + k - 1;
+        if (cnt[s[l - 1] - 'a'] == 1) --sum; // 注意先减后加
+        cnt[s[l - 1] - 'a'] -= 1;
+        if (cnt[s[r] - 'a'] == 0) ++sum;
+        cnt[s[r] - 'a'] += 1;
+        if (sum == k) ++ret;
+    }
+    return ret;
 }

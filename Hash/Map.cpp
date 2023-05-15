@@ -2,29 +2,6 @@
 
 
 
-// 560 medium nums不是有序且有负数，求所有的字串之和为k的连续子串的个数
-// 找字串和，一般都和前缀和有关，假设[i,j]为符合题意的子串，则 preSum[i]-preSum[j-1]=k
-// 所以第一种方法就是前缀和+暴力搜索i和j O(n^2)
-// 可以发现，preSum[i]-k=preSum[j-1]，可以利用空间换时间的思路
-// 如果用一个键值对 {preSum[i],times} 去记录每个前缀和出现的次数，
-// 对于每一个preSum[i]，如果前面有多个符合题意的preSum[j-1]，cnt就可以加上这个数量
-// 所以只需要一次遍历
-// 前缀和+哈希表
-int subarraySum(vector<int>& nums, int k) {
-    unordered_map<int, int> mp;
-    mp[0] = 1;  // 和为0的情况初始化为1，即前0个数之和
-    int preSum = 0, res = 0;
-    for (int& num : nums) {
-        preSum += num;
-        if (mp.find(preSum-k) != mp.end()) {
-            res += mp[preSum-k];
-        }
-        mp[preSum] += 1;
-    }
-    return res;
-}
-
-
 // 49 medium strs中包含若干个字符串，其中某些的字母种类和对应的个数相同，一组称为anagram，将其组起来
 // Input: strs = ["eat","tea","tan","ate","nat","bat"]
 // Output: [["bat"],["nat","tan"],["ate","eat","tea"]]

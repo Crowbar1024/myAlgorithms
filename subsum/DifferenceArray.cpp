@@ -14,46 +14,67 @@
 */
 
 
-// 1109 medium booksing的内容为{l,r,add}，[l,r]都加上一个数add。返回更新完后的数组
+// 1109 medium booksing[i] = {l,r,add}，[l,r]都加上一个数add。返回更新完后的数组
 // 1 <= l <= r <= n
 vector<int> corpFlightBookings(vector<vector<int>>& bookings, int n) {
-    vector<int> df(n+2, 0);  // l从1开始，最后一位更新是n+1（左右都闭），所以一共n+2个
-    for (int i=0; i<bookings.size(); ++i) {
-        int l = bookings[i][0], r = bookings[i][1], addNum = bookings[i][2];
-        df[l] += addNum;
-        df[r+1] -= addNum;
+    vector<int> df(n+1, 0); // 看+-的逻辑
+    for (int i = 0; i < bookings.size(); ++i) {
+        int l = bookings[i][0] - 1, r = bookings[i][1] - 1, addNum = bookings[i][2];
+        df[l] += addNum; // 相比l-1多了
+        df[r+1] -= addNum; // 相比r少了
     }
-    vector<int> res(n, 0);
-    res[0] = df[1];
-    for (int i=1; i<n; ++i) {
-        res[i] = res[i-1] + df[i+1];
+    vector<int> ret(n, 0);
+    ret[0] = df[0];
+    for (int i = 1; i < n; ++i) {
+        ret[i] += ret[i-1] + df[i];
     }
-    return res;
+    return ret;
 }
 
 
-// 1094 meidum 乘客上下车问题，trips{n,l,r}，n个客人l时上车，r时下车，车负载capacity，问是否会超载
-// 关键点：需要找到最远的距离，作为差分数组的长度
+// 1094 meidum trips[i]={n,l,r} n个客人在l时上车，r时下车。车负载capacity，问是否会超载
 // 下车时人走了，所以不是r+1做改变
-// 0 <= l < r <= 1000
 bool carPooling(vector<vector<int>>& trips, int capacity) {
     int n = trips.size();
-    int len = 0;  // 最远距离
+    int len = 0;  // 最晚下车时间。作为差分数组的长度
     for (int i=0; i<n; ++i) {
         len = max(len, trips[i][2]);
     }
-    vector<int> df(len+1, 0);  // 0也算
+    vector<int> df(len+1, 0); // 0 <= l < r <= 1000 l可以取到0
     for (int i=0; i<n; ++i) {
         int l = trips[i][1], r = trips[i][2], addN = trips[i][0];
-        df[l] += addN;
-        df[r] -= addN;
+        df[l] += addN; // 相比l-1时多了人
+        df[r] -= addN; // 相比r-1时少了人
     }
     int num = 0;
-    for (const int& x : df) {
+    for (int x : df) {
         num += x;
         if (num > capacity) return false;
     }
     return true;
+}
+
+
+// 253 medium 每个会议时间都会包括开始和结束的时间 intervals[i] = [starti, endi] ，返回所需会议室的最小数量
+// 隐含条件，区间重合的不能用一个会议室，这道题当然可以用贪心做。但可以想一想，如果把他当作上车问题，那么就是求车上最大的人数
+// 0 <= starti < endi <= 1e6 所以用差分数组做复杂度会很高
+int minMeetingRooms(vector<vector<int>>& intervals) {
+    int len = 0; // 最晚会议使用时间
+    for (vector<int> &interval : intervals) {
+        len = max(len, interval[1]);
+    }
+    vector<int> df(len + 1, 0); // 查看+-逻辑
+    for (vector<int> &interval : intervals) {
+        df[interval[0]] += 1;
+        df[interval[1]] -= 1; // 结束会议时间r，此时会议结束了，所以相当于r-1下车
+    }
+    vector<int> curCnt(len, 0); // 每个时间点的人数
+    curCnt[0] = df[0];
+    for (int i = 1; i < len; ++i) {
+        curCnt[i] = curCnt[i-1] + df[i];
+    }
+    int ret = *max_element(curCnt.begin(), curCnt.end());
+    return ret;
 }
 
 
