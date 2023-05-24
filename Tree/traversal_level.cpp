@@ -2,8 +2,8 @@
 
 // 102 medium 层序遍历
 vector<vector<int>> levelOrder(TreeNode* root) {
-    vector<vector<int>> res;
-    if (!root) return res;
+    vector<vector<int>> ret;
+    if (!root) return ret;
     queue<TreeNode*> q;
     TreeNode *cur = root;
     q.push(cur);
@@ -16,9 +16,9 @@ vector<vector<int>> levelOrder(TreeNode* root) {
             if (cur->left) q.push(cur->left);
             if (cur->right) q.push(cur->right);
         }
-        res.emplace_back(level);
+        ret.emplace_back(level);
     }
-    return res;
+    return ret;
 }
 // 107 mudium 逆序输出，reverse就行
 // 109 medium 输出右侧，只要每次for中记录最后的元素

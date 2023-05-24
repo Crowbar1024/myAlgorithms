@@ -25,13 +25,13 @@ string longestWord(vector<string>& words) {
         return s1.size() < s2.size();
     });
     unordered_set<string> exist{""};
-    string res = "";
+    string ret = "";
     for (const string& s : words) {
         string pre = s.substr(0, s.size()-1);
         if (exist.count(pre)) {  // 有前缀才放进来
             exist.insert(s);
-            res = s;
+            ret = s;
         }
     }
-    return res;
+    return ret;
 }

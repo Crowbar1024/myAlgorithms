@@ -7,14 +7,14 @@
 // Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
 vector<vector<string>> groupAnagrams(vector<string>& strs) {
     unordered_map<string, vector<string>> m; // 键值就是排好序的string
-    vector<vector<string>> res;
+    vector<vector<string>> ret;
     for (string& str : strs) {
         string key = str;
         sort(key.begin(), key.end());
         m[key].emplace_back(str);
     }
-    for (auto it = m.begin(); it != m.end(); ++it) res.emplace_back(it->second);
-    return res;
+    for (auto it = m.begin(); it != m.end(); ++it) ret.emplace_back(it->second);
+    return ret;
 }
 // 2 用26个字母对应的个数组成的数组，但这样键值就是一个数组，C++对于这种情况需要写一个对于数组的哈希函数，过于复杂
 // 3 使用质数去设计键值，26个字母对应的质数，每个单次的字母的质数的一定不会重复，但有可能会溢出，取模有概率会碰撞
@@ -29,7 +29,7 @@ vector<int> findAnagrams(string s, string p) {
     for (char ch = 'a'; ch <= 'z'; ++ch) pm[ch] = 0;
     for (char ch : p) pm[ch] += 1;
     unordered_map<char,int> wd;
-    vector<int> res;
+    vector<int> ret;
     while (r < s.size()) {
         wd[s[r]] += 1;
         // 只要wd多了，就可以l前移
@@ -38,9 +38,9 @@ vector<int> findAnagrams(string s, string p) {
             ++l;
         }
         if (r-l+1 == len) {
-            res.emplace_back(l);
+            ret.emplace_back(l);
         }
         ++r;
     }
-    return res;
+    return ret;
 }

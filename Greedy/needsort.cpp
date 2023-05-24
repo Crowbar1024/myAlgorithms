@@ -94,16 +94,16 @@ vector<int> partitionLabels(string s) {
     for (int i = 0; i < s.size(); ++i) {
         pos[s[i]-'a'] = i;
     }
-    vector<int> res;
+    vector<int> ret;
     int l = 0, r = 0;
     for (int i = 0; i < s.size(); ++i) {
         r = max(r, pos[s[i]-'a']);
         if (i == r) {
-            res.emplace_back(r-l+1);
+            ret.emplace_back(r-l+1);
             l = i + 1;
         }
     }
-    return res;
+    return ret;
 }
 
 // 455 easy g是任务等级，s是机器等级。一个任务只能被等级大于等于它的机器完成。最多完成几个任务

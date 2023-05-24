@@ -110,11 +110,11 @@ int findKth(vector<int> a, int n, int K) {
 int heightChecker(vector<int>& heights) {
     vector<int> bucket(101, 0);
     for (int n : heights) bucket[n]++;
-    int res = 0, cur = 0;
+    int ret = 0, cur = 0;
     for (int n : heights) {
         while (bucket[cur] == 0) cur++;
-        if (cur != n) res++;
+        if (cur != n) ret++;
         bucket[cur]--;
     }
-    return res;
+    return ret;
 }

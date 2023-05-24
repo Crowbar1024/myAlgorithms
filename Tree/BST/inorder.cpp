@@ -8,22 +8,22 @@
 // 而递增序列的性质不一定要用迭代直接得到输出数组，也可以用树结构来写
 // 因为拿到一个节点，其中序遍历的前者必然是其左儿子
 int getMinimumDifference(TreeNode* root) {
-    int res = INT_MAX, pre = -1;
-    inorder(root, pre, res);
-    return res;
+    int ret = INT_MAX, pre = -1;
+    inorder(root, pre, ret);
+    return ret;
 }
-// res 统计了以cur为根节点的子树的最小绝对差，pre是左父右的顺序
+// ret 统计了以cur为根节点的子树的最小绝对差，pre是左父右的顺序
 // 这里pre的设计就是中序遍历的内核
-void inorder(TreeNode* cur, int& pre, int& res) {
+void inorder(TreeNode* cur, int& pre, int& ret) {
     if (!cur) return;
-    inorder(cur->left, pre, res);
+    inorder(cur->left, pre, ret);
     if (pre == -1) {
         pre = cur->val;
     } else {
-        res = min(res, cur->val-pre);  // pre的顺序保证了永远为正
+        ret = min(ret, cur->val-pre);  // pre的顺序保证了永远为正
         pre = cur->val;
     }
-    inorder(cur->right, pre, res);
+    inorder(cur->right, pre, ret);
 }
 
 // 501 easy 寻找BST中的众数，若有多个，无关顺序
@@ -36,12 +36,12 @@ public:
     int pre;
     int count;
     int maxCount;
-    vector<int> res;
+    vector<int> ret;
     vector<int> findMode(TreeNode* root) {
         int pre = -1, count = maxCount = 1;
-        res.clear();
+        ret.clear();
         inorder(root);
-        return res;
+        return ret;
     }
     void inorder(TreeNode* cur) {
         if (!cur) return;
@@ -55,11 +55,11 @@ public:
             count = 1;
         }
         if (count > maxCount) {
-            res.clear();
-            res.emplace_back(cur->val);
+            ret.clear();
+            ret.emplace_back(cur->val);
             maxCount = count;
         } else if (maxCount == count) {
-            res.emplace_back(cur->val);
+            ret.emplace_back(cur->val);
         }
         pre = cur->val;
         

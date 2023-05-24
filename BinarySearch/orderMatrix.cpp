@@ -87,8 +87,8 @@ int kthSmallest(vector<vector<int>>& matrix, int k) {
         pq.pop();
         if (++(tmp.col) < m) pq.push(point{tmp.row, tmp.col, matrix[tmp.row][tmp.col]});
     }
-    point res = pq.top();
-    return matrix[res.row][res.col];
+    point ret = pq.top();
+    return matrix[ret.row][ret.col];
 }
 // 如果要用二分法，根据经验，二分的对象就是数，统计所有小于等于这个数的数的个数，计数法
 int kthSmallest(vector<vector<int>>& matrix, int k) {

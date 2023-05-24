@@ -33,10 +33,10 @@ int minSessions(vector<int>& tasks, int sessionTime) {
 // 返回最多能满足的请求数。
 int maximumRequests(int n, vector<vector<int>>& requests) {
     vector<int> bd(n); // building，每栋楼的人数变化
-    int res = 0, m = requests.size(), num = 1 << m;
+    int ret = 0, m = requests.size(), num = 1 << m;
     for (int state = 1; state < num; ++state) { // 得遍历完所有状态
         int cnt = __builtin_popcount(state); // 为了剪枝，先使用O1的算法将该状态
-        if (cnt <= res) continue;
+        if (cnt <= ret) continue;
         fill(bd.begin(), bd.end(), 0);
         for (int i = 0; i < m; ++i) { // 遍历请求
             if (state & (1 << i)) {
@@ -45,8 +45,8 @@ int maximumRequests(int n, vector<vector<int>>& requests) {
             }
         }
         if (all_of(bd.begin(), bd.end(), [](int x) { return x == 0; })) {
-            res = cnt;
+            ret = cnt;
         }
     }
-    return res;
+    return ret;
 }

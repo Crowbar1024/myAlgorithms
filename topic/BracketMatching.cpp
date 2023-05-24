@@ -25,29 +25,29 @@ bool isValid(string s) {
 // 22 medium 生成所有的由n对括号组成的合法组合。
 // 应该没有大于的情况，不然多余的右括号没有匹配了
 vector<string> generateParenthesis(int n) {
-    vector<string> res;
+    vector<string> ret;
     string snap = "";
-    dfs(n, n, res, snap);
-    return res;
+    dfs(n, n, ret, snap);
+    return ret;
 }
-void dfs(int lnum, int rnum, vector<string>& res, string& snap) {
+void dfs(int lnum, int rnum, vector<string>& ret, string& snap) {
     if (lnum == 0 && rnum == 0) { // 左右括号都用完了，snap结束
-        res.push_back(snap);
+        ret.push_back(snap);
         return;
     }
     if (lnum == rnum) { // 左右括号数相等，只能先放左括号，所以剩余的左括号数量永远小于等于右括号
         snap += "(";
-        dfs(lnum-1, rnum, res, snap);
+        dfs(lnum-1, rnum, ret, snap);
         snap.pop_back();
     // 若小于，有两种情况，比如((，下一个可以是左括号也可以是右括号
     } else {
         if (lnum > 0) {
             snap += "(";
-            dfs(lnum-1, rnum, res, snap);
+            dfs(lnum-1, rnum, ret, snap);
             snap.pop_back();
         }
         snap += ")";
-        dfs(lnum, rnum-1, res, snap);
+        dfs(lnum, rnum-1, ret, snap);
         snap.pop_back();
     }
 }
@@ -103,15 +103,15 @@ bool isValidString(string s) {
 // 1614 easy 括号的最大嵌套深度 保证一定是有效
 // 遇到( 就可以+1，甚至不需要考虑进出栈（因为有效）
 int maxDepth(string s) {
-    int res = 0, tmp = 0;
+    int ret = 0, tmp = 0;
     for (char ch : s) {
         if (ch == '(') ++tmp;
         else if (ch == ')') {
-            res = max(res, tmp);
+            ret = max(ret, tmp);
             --tmp;
         }
     }
-    return res;
+    return ret;
 }
 
 
@@ -132,16 +132,16 @@ string reverseParentheses(string s) {
             partner[j] = i;
         }
     }
-    string res = "";
+    string ret = "";
     int cur = 0, dir = 1; // 开始是正向
     while (cur < s.size()) {
         if (s[cur] == '(' || s[cur] == ')') { // 遇到括号就反转遍历顺序
             cur = partner[cur];
             dir = -dir;
-        } else res += s[cur];
+        } else ret += s[cur];
         cur += dir; // 前进
     }
-    return res;
+    return ret;
 }
 
 // 32 hard 最长连续有效括号串的长度
@@ -149,34 +149,34 @@ string reverseParentheses(string s) {
 int longestValidParentheses(string s) {
     stack<int> sk;
     sk.emplace(-1); // 哨兵，避免右括号开局时无法pop
-    int res = 0;
+    int ret = 0;
     for (int i = 0; i < s.size(); ++i) {
         if (s[i] == '(') sk.emplace(i); // 压入左括号的下标
         else {
             sk.pop(); // 1 匹配一个左括号 2 左括号匹配完了，弹出哨兵，待会记录最新的没有匹配的右括号下标
             if (sk.empty()) sk.emplace(i); // 压入最新的没有匹配的右括号下标
-            else res = max(res, i-sk.top()); // 只匹配了一个左括号也要更新长度（上一个没有匹配的左/右括号和匹配到的右括号之差）
+            else ret = max(ret, i-sk.top()); // 只匹配了一个左括号也要更新长度（上一个没有匹配的左/右括号和匹配到的右括号之差）
         }
     }
-    return res;
+    return ret;
 }
 // 还有一种双指针的做法，利用22的思路，即左括号和右括号的数量来判断有效匹配的长度
 int longestValidParentheses(string s) {
-    int res = 0, l = 0, r = 0;
+    int ret = 0, l = 0, r = 0;
     for (int i = 0; i < s.size(); ++i) { // 正向遍历
         if (s[i] == '(') ++l;
         else ++r;
-        if (l == r) res = max(res, 2*l); //  数量相等，说明此时是有效串
+        if (l == r) ret = max(ret, 2*l); //  数量相等，说明此时是有效串
         else if (l < r) l = r = 0; // ..右括号第一次出现时，会自动初始
     }
     l = r = 0;
     for (int i = s.size()-1; i >= 0; --i) {
         if (s[i] == '(') ++r; // 反过来
         else ++l;
-        if (l == r) res = max(res, 2*l);
+        if (l == r) ret = max(ret, 2*l);
         else if (l < r) l = r = 0;
     }
-    return res;
+    return ret;
 }
 
 
@@ -186,25 +186,25 @@ int longestValidParentheses(string s) {
 string decodeString(string s) {
     stack<string> sts;
     stack<int> stn;
-    string res = ""; // 记录的其实是当前[]中的数，遇到[就重置，遇到]就更新
+    string ret = ""; // 记录的其实是当前[]中的数，遇到[就重置，遇到]就更新
     for (int pos = 0; pos < s.size(); ++pos) {
-        if (isalpha(s[pos])) { // 字母存在res中，遇到下一个[时，将[res]放进字母栈
-            res += s[pos];
+        if (isalpha(s[pos])) { // 字母存在res中，遇到下一个[时，将[ret]放进字母栈
+            ret += s[pos];
         } else if (isdigit(s[pos])) {
             int num = s[pos]-'0';
             while (isdigit(s[++pos])) num = 10*num+s[pos]-'0'; // 得到num
             stn.emplace(num);
             --pos;  // 之前过了一格
         } else if (s[pos] == '[') {
-            sts.emplace(res);  // 3[ABC]1[A]，第二个[出现时，把ABCABCABC存进去
-            res = "";  // 开始记录下一段[]
-        } else { // num[res]，一对结束，将其展开赋值给res
+            sts.emplace(ret);  // 3[ABC]1[A]，第二个[出现时，把ABCABCABC存进去
+            ret = "";  // 开始记录下一段[]
+        } else { // num[ret]，一对结束，将其展开赋值给res
             int num = stn.top(); stn.pop(); // []前必然是数字
             string tmps = "";
-            while (num--) tmps += res;  // num[res]
-            res = sts.top()+tmps;  // 把之前存的和这一次倍增的加起来，注意顺序
+            while (num--) tmps += ret;  // num[ret]
+            ret = sts.top()+tmps;  // 把之前存的和这一次倍增的加起来，注意顺序
             sts.pop(); // 之前存的取出来
         }
     }
-    return res;
+    return ret;
 }

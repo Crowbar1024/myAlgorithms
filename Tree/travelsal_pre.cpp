@@ -57,15 +57,15 @@ int sumNumbersHelp(TreeNode* node, int sum) {
 // 显然，经过节点cur的路径会包含他的两条儿子路径
 // 难点在于想到子函数只返回单条最长的路径
 int maxPathSum(TreeNode* root) {
-    int res = INT_MIN;
-    maxPathSumHelp(root, res);
-    return res;
+    int ret = INT_MIN;
+    maxPathSumHelp(root, ret);
+    return ret;
 }
-int maxPathSumHelp(TreeNode* root, int& res) {
+int maxPathSumHelp(TreeNode* root, int& ret) {
     if (!root) return 0;
-    int lsum = max(0, maxPathSumHelp(root->left, res));
-    int rsum = max(0, maxPathSumHelp(root->right, res));
-    res = max(res, lsum+rsum+root->val);
+    int lsum = max(0, maxPathSumHelp(root->left, ret));
+    int rsum = max(0, maxPathSumHelp(root->right, ret));
+    ret = max(ret, lsum+rsum+root->val);
     return max(lsum, rsum) + root->val;
 } 
 

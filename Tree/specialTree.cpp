@@ -98,12 +98,12 @@ void dfs(vector<node>& tree, int cur, vector<int>& path, int curPathSum, int sum
 // 求每次查询后剩余的节点数
 // 这道题不需要建自定义数组，直接二维数组搞定
 // isVisited是备忘录
-void dfs(vector<int>& isVisited, vector<vector<int>>& tree, int cur, int& res) {
+void dfs(vector<int>& isVisited, vector<vector<int>>& tree, int cur, int& ret) {
     if (isVisited[cur] == 1) return;
     isVisited[cur] = 1;
-    --res;
+    --ret;
     for (int i = 0; i < tree[cur].size(); ++i) {
-        dfs(isVisited, tree, tree[cur][i], res);
+        dfs(isVisited, tree, tree[cur][i], ret);
     }
 }
 
@@ -130,18 +130,18 @@ public:
     vector<int> subordinates;
 };
 int getImportance(vector<Employee*> employees, int id) {
-    int res = 0;
+    int ret = 0;
     unordered_map<int, Employee*> m;
     for (int i = 0; i < employees.size(); ++i) {
         m[employees[i]->id] = employees[i];
     }
-    dfs(m, id, res);
-    return res;
+    dfs(m, id, ret);
+    return ret;
 }
-void dfs(unordered_map<int, Employee*>& m, int id, int& res) {
-    res += m[id]->importance;
+void dfs(unordered_map<int, Employee*>& m, int id, int& ret) {
+    ret += m[id]->importance;
     if (m[id]->subordinates.empty()) return;
     for (int i = 0; i < m[id]->subordinates.size(); ++i) {
-        dfs(m, m[m[id]->subordinates[i]]->id, res);
+        dfs(m, m[m[id]->subordinates[i]]->id, ret);
     }
 }

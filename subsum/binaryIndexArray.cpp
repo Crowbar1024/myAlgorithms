@@ -20,9 +20,9 @@ private:
         }
     }
     int prefixSum(int index) { // [1,index]区间查询
-        int res = 0;
-        for (int i = index; i > 0; i -= lowbit(i)) res += bia[i];
-        return res;
+        int ret = 0;
+        for (int i = index; i > 0; i -= lowbit(i)) ret += bia[i];
+        return ret;
     }
 public:
     NumArray(vector<int> &nums) : nums(nums), bia(nums.size()+1,0) {
@@ -34,8 +34,8 @@ public:
         nums[index] = val;  // 别忘记原始数组要保留变化
     }
     int sumRange(int left, int right) { // [left,right]区间查询，sum(right)-sum(left-1)
-        int res = prefixSum(right+1) - prefixSum(left); // 注意下标
-        return res;
+        int ret = prefixSum(right+1) - prefixSum(left); // 注意下标
+        return ret;
     }
 };
 
@@ -61,21 +61,21 @@ private:
         for (int i = index; i <= n; i += lowbit(i)) cnt[i] += increment;
     }
     int prefixSum(int index) {
-        int res = 0;
-        for (int i = index; i > 0; i -= lowbit(i)) res += cnt[i];
-        return res;
+        int ret = 0;
+        for (int i = index; i > 0; i -= lowbit(i)) ret += cnt[i];
+        return ret;
     }
 public:
     vector<int> countSmaller(vector<int>& nums) {
         Init(nums);
-        vector<int> res(nums.size(), 0); // n不是个数，是种数
+        vector<int> ret(nums.size(), 0); // n不是个数，是种数
         for (int i = nums.size()-1; i >= 0; --i) {
             // 找到nums[i]在arr中的下标，注意arr是0开始，但cnt树状数组是从1开始，所以+1就是cnt的位置
             int index = lower_bound(arr.begin(), arr.end(), nums[i])-arr.begin()+1;
-            res[i] = prefixSum(index-1);  // [1,index-1]区间和，就是当前小于nums[i]的数量
+            ret[i] = prefixSum(index-1);  // [1,index-1]区间和，就是当前小于nums[i]的数量
             addBIA(index, 1); // 出现频率+1
         }
-        return res;
+        return ret;
     }
 };
 // 这道题是逆序对数目的进阶版
@@ -125,16 +125,16 @@ private:
     }
 
     int prefixSum(int index) {
-        int res = 0;
-        for (int i = index; i > 0; i -= lowbit(i)) res += cnt[i];
-        return res;
+        int ret = 0;
+        for (int i = index; i > 0; i -= lowbit(i)) ret += cnt[i];
+        return ret;
     }
 
 
 public:
     int reversePairs(vector<int>& nums) {
         Init(nums);
-        int res = 0;
+        int ret = 0;
         for (int i = nums.size()-1; i >= 0; --i) {
             int index = m[nums[i]];
             // 1 9 4 9 1
@@ -153,11 +153,11 @@ public:
             auto it = s.lower_bound(tmp);
             if (it != s.begin()) {
                 it--;
-                res += prefixSum(m[*it]);
+                ret += prefixSum(m[*it]);
             }
             addBIA(index, 1);
         }
-        return res;
+        return ret;
     }
 };
 
@@ -174,9 +174,9 @@ private:
         for (int i = index; i < maxn; i += lowbit(i)) cnt[i] += increment;
     }
     int prefixSum(int index) {
-        int res = 0;
-        for (int i = index; i > 0; i -= lowbit(i)) res += cnt[i];
-        return res;
+        int ret = 0;
+        for (int i = index; i > 0; i -= lowbit(i)) ret += cnt[i];
+        return ret;
     }
     int getKthMinNum(int k) {
         int l = 1, r = maxn; // [l,r)
@@ -247,9 +247,9 @@ private:
     }
 
     int prefixSum(int index) {
-        int res = 0;
-        for (int i = index; i > 0; i -= lowbit(i)) res = (res+cnt[i])%MOD;
-        return res;
+        int ret = 0;
+        for (int i = index; i > 0; i -= lowbit(i)) ret = (ret+cnt[i])%MOD;
+        return ret;
     }
 public:
     int getNumber(vector<int>& nums) {

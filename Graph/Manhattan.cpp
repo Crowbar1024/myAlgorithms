@@ -10,11 +10,11 @@ int minStreetDistance(vector<int> x, vector<int> y) {
     int n = x.size();
     sort(x.begin(), x.end());
     sort(y.begin(), y.end());
-    int res = 0;
+    int ret = 0;
     for (int i = 0; i < n/2; i++) {
-        res += x[n-i-1]- x[i] + y[n-i-1] - y[i];
+        ret += x[n-i-1]- x[i] + y[n-i-1] - y[i];
     }
-    return res;
+    return ret;
 }
 
 // 1131 最远曼哈顿距离
@@ -26,4 +26,4 @@ int minStreetDistance(vector<int> x, vector<int> y) {
 // C = arr1[i] - arr2[i] + i
 // D = arr1[i] - arr2[i] - i
 // 最终可以化为的形式
-// max{res} = max{max(A)-min(A),max(B)-min(B),max(C)-min(C),max(D)-min(D)}
+// max{ret} = max{max(A)-min(A),max(B)-min(B),max(C)-min(C),max(D)-min(D)}

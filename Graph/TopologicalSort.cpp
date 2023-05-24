@@ -52,6 +52,64 @@ bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
 
 
 
+// 269 hard 给定了一些单词的顺序，注意不是字典序。根据单词的顺序返回任意符合题意的字母顺序
+// 每次比较前后两个单词，找到第一个不同的字母，将后面的放到前一个的邻接表里，然后对这个邻接表进行拓扑排序
+// 但这样会有一些特殊情况无法判断，比如 ab adc z z这种，所以一开始就需要全部遍历所有字母，因为找到不同就直接break了。
+// 然后就是对邻接表的思考，因为使用队列来进行拓扑排序，即需要得到所有入度为0的节点，但是有些节点是单个节点，没有next也没有prev。
+// 这样的话，为了节省一个vis的数组，把邻接表变成哈希map。
+// 同理，为了避免a b ca cb，即a-b建立两次连接，哈希表的值是哈希set。
+string alienOrder(vector<string>& words) {
+    int n = words.size();
+    unordered_map<char, unordered_set<char>> adjm;
+    unordered_map<char, int> ind;
+    for (string &word : words) {
+        for (char ch : word) {
+            if (!adjm.count(ch)) {
+                ind[ch] = 0;
+                adjm[ch] = unordered_set<char>{}; // 初始化
+            }
+        }
+    }
+    for (int i = 1; i < n; ++i) {
+        string &l = words[i-1], &r = words[i];
+        int minl = min(l.size(), r.size()), j = 0;
+        while (j < minl) {
+            if (l[j] != r[j]) {
+                // 下面是无法全部检测出来的，因为传递性在当前的for循环里无法生效
+                if (adjm[r[j]].count(l[j])) return "";
+                if (!adjm[l[j]].count(r[j])) {
+                    adjm[l[j]].emplace(r[j]);
+                    ind[r[j]] += 1;
+                }
+                break;
+            }
+            ++j;
+        }
+        if (j == minl && minl < l.size()) return "";
+    }
+    queue<int> q;
+    for (auto [ch, _] : adjm) {
+        if (!ind[ch]) {
+            q.emplace(ch);
+            // 不能break，因为可能有多个入读为0的节点
+        }
+    }
+    string ret = "";
+    while (!q.empty()) { // 因为有入度的限制，必然会结束BFS
+        char cur = q.front();
+        q.pop();
+        ret += cur;
+        for (char next : adjm[cur]) {
+            if (--ind[next] == 0) {
+                q.emplace(next);
+            }
+        }
+    }
+    return ret.size() == adjm.size() ? ret : ""; // 有环
+}
+
+
+
 // vivo 21秋A i的编译依赖input[i]，-1表示头节点
 // 比如 5,0,4,4,5,-1
 // 5->0 0->1 4->2 4->3 5->4 5(head)
@@ -79,21 +137,52 @@ string compileSeq(string input) {
     for (int i = 0; i < n; ++i) {
         if (!in[i]) q.emplace(i);
     }
-    string res;
+    string ret;
     while (!q.empty()) {
         int cur = q.top(); q.pop();
         n -= 1;
-        res += to_string(cur);
-        res += ",";
+        ret += to_string(cur);
+        ret += ",";
         for (int next : adjL[cur]) {
             if (--in[next] == 0) q.emplace(next);
         }
     }
-    res.pop_back();
-    return res;
+    ret.pop_back();
+    return ret;
 }
 
-
+// 444 medium nums是[1, n]范围内所有整数的排列。sequences[i]是nums的子序列
+// 检查 nums 是否是唯一的最短超序列。这道题其实就是给了一系列编译顺序，问nums是否是其唯一拓扑排序
+// 只要判断队列长度一直唯一，说明下一个元素只有一种选择。
+// 又因为sequences[i]之间可能会重叠，比如{1,2}{1,3}{1,2,3}，所以需要每个节点对应的数组元素的是一个集合
+bool sequenceReconstruction(vector<int>& nums, vector<vector<int>>& sequences) {
+    const int n = nums.size();
+    vector<int> in(n + 1, 0); // 从1开始
+    vector<unordered_set<int>> adjL(n + 1);
+    for (vector<int> &seq : sequences) {
+        for (int i = 1; i < seq.size(); ++i) {
+            int prev = seq[i-1], next = seq[i];
+            if (!adjL[prev].count(next)) { // 重复的线不能+=1
+                adjL[prev].emplace(next);
+                in[next] += 1;
+            }
+        }
+    }
+    queue<int> q;
+    for (int i = 1; i <= n; ++i) {
+        if (!in[i]) q.emplace(i); // 入度为0的节点入列
+    }
+    int pos = 0;
+    while (!q.empty()) {
+        if (q.size() > 1) return false;
+        int cur = q.front(); q.pop();
+        if (cur != nums[pos++]) return false;
+        for (int next : adjL[cur]) {
+            if (--in[next] == 0) q.emplace(next);
+        }
+    }
+    return true;
+}
 
 // 310 medium 一个全连通的无向图，n个节点[0:n-1]，n-1条边。<x,y>表示x与y相连。
 // 可选择图中任何一个节点作为一颗树的根。请你找到所有的最小高度树并按任意顺序返回它们的根节点标签列表。
@@ -123,11 +212,11 @@ vector<int> findMinHeightTrees(int n, vector<vector<int>>& edges) {
             }
         }
     }
-    vector<int> res;
+    vector<int> ret;
     while (!q.empty()) {
-        res.emplace_back(q.front()); q.pop();
+        ret.emplace_back(q.front()); q.pop();
     }
-    return res;
+    return ret;
 }
 // PAT 1021 做了一定修改。最大高度树，返回对应的高度和根结点。如果有多个，按照节点序号从小到大输出。
 // 可证：如果s-t为无向图的最长路径，那么从任意节点深搜得到的最深的节点一定是s或者t。但另一个往往得不到，除非dfs起点为“中点”
@@ -144,25 +233,25 @@ vector<int> findMaxHeightTrees(int n, vector<vector<int>>& edges) {
     vector<bool> isVisit(n, false);
     
     int maxlen = 0;
-    vector<int> res; // 存储符合题意的节点
-    dfs(isVisit, adjL, res, 0, 1, maxlen);
-    int p = res[0]; // 其实任意都行
+    vector<int> ret; // 存储符合题意的节点
+    dfs(isVisit, adjL, ret, 0, 1, maxlen);
+    int p = ret[0]; // 其实任意都行
     fill(isVisit.begin(), isVisit.end(), false); // 重新开始dfs
     // maxlen和nodes不用更新，前者会更大，后者本来就保存了一部分端点
-    dfs(isVisit, adjL, res, p, 1, maxlen);
-    return res;
+    dfs(isVisit, adjL, ret, p, 1, maxlen);
+    return ret;
 }
-void dfs(vector<bool>& isVisit, vector<vector<int>>& adjL, vector<int>& res, int i, int len, int maxlen) {
+void dfs(vector<bool>& isVisit, vector<vector<int>>& adjL, vector<int>& ret, int i, int len, int maxlen) {
     if (len > maxlen) { // 更新最长路径的长度和端点
         maxlen = len;
-        res.clear();
-        res.emplace_back(i);
+        ret.clear();
+        ret.emplace_back(i);
     } else if (len == maxlen) {
-        res.emplace_back(i);
+        ret.emplace_back(i);
     }
     isVisit[i] = true;
     for (int next : adjL[i]) {
-        if (!isVisit[next]) dfs(isVisit, adjL, res, next, len+1, maxlen);
+        if (!isVisit[next]) dfs(isVisit, adjL, ret, next, len+1, maxlen);
     }
 }
 

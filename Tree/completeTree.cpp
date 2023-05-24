@@ -14,13 +14,13 @@ int countNodes(TreeNode* root) {
 // 如果要利用这个性质，也比较容易想到，左右子树的的最左一定是最长
 // 于是首先写一个函数计算最长深度
 int getDepth(TreeNode* root) {
-    int res =  0;
+    int ret =  0;
     TreeNode* cur = root;
     while (cur) {
-        ++res;
+        ++ret;
         cur = cur->left;
     }
-    return res;
+    return ret;
 }
 // 如果左右子树的最长深度一致，说明右子树有可能最后一行右边有所缺漏；否则左大于右的
 int countNodes(TreeNode* root) {

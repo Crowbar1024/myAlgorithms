@@ -30,18 +30,18 @@ int mySqrt(int x) {
 double myPow(double x, int n) {
     if (abs(x) < 1e-6) return x;  // x = 0
     if (abs(x) - 1 < 1e-6 && abs(x) - 1 > -1e-6) return x > 0 ? x : n & 1 ? x : -x;  // x = 1 or -1
-    double res = 1.0;
+    double ret = 1.0;
     long m = static_cast<long>(n);
     if (m < 0) {
         x = 1.0 / x;
         m = -m;
     }
     while (m) {
-        if (m & 1) res *= x;
+        if (m & 1) ret *= x;
         x *= x;
         m >>= 1;
     }
-    return res;
+    return ret;
 }
 
 // 给你两个整数，被除数和除数(不为0)。将两数相除，要求不使用乘法、除法和取余运算。商截去其小数部分
@@ -66,7 +66,7 @@ int divide(int dividend, int divisor) {
         part <<= 1;
         power <<= 1;
     }
-    int res = 0;
+    int ret = 0;
     while (dividend >= divisor) {
         while (part > dividend) { // 找到次大的幂
             part >>= 1;
@@ -74,8 +74,8 @@ int divide(int dividend, int divisor) {
         }
         if (part <= dividend) { // 2^power*divisor
             dividend -= part;
-            res += power;
+            ret += power;
         }
     }
-    return flag ? res : -res;
+    return flag ? ret : -ret;
 }

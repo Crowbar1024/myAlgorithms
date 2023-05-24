@@ -32,14 +32,14 @@ int dfs(int pos, int pre, int state, bool limit) {
 	if (pos < 0) return 1;
 	if (!limit && dp[pos][state] != -1) return dp[pos][state];
 	int up = limit ? a[pos] : 9;
-	int res = 0;
+	int ret = 0;
 	for (int i=0; i<=up; i++) {
 		if (i == 4) continue;
 		if (pre == 6 && i == 2) continue;
-		res += dfs(pos-1, i, i==6, limit && i==a[pos]);
+		ret += dfs(pos-1, i, i==6, limit && i==a[pos]);
 	}
-	if (!limit) dp[pos][state] = res;
-	return res;
+	if (!limit) dp[pos][state] = ret;
+	return ret;
 }
 
 int solve(int x) {

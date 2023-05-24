@@ -29,15 +29,15 @@ int maxSubArrayLen(vector<int>& nums, int k) {
 // 但可以用一次循环同时更新
 vector<int> productExceptSelf(vector<int>& nums) {
     int n = nums.size();
-    vector<int> res(n, 1);
+    vector<int> ret(n, 1);
     int prefix = 1, suffix = 1;  // 前缀积和后缀积
     for (int i = 0; i < n; ++i) {
-        res[i] *= prefix;
-        res[n-i-1] *= suffix;
+        ret[i] *= prefix;
+        ret[n-i-1] *= suffix;
         prefix *= nums[i];
         suffix *= nums[n-i-1];
     }
-    return res;
+    return ret;
 }
 
 
@@ -105,14 +105,14 @@ int subarraysDivByK(vector<int>& nums, int k) {
 // 152 medium 数组中乘积最大的非空连续子串，并返回该子数组所对应的乘积。
 // dp，两个数组，一个最大，一个最小，然后状态压缩
 int maxProduct(vector<int>& nums) {
-    int dp1 = nums[0], dp2 = nums[0], res = nums[0];
+    int dp1 = nums[0], dp2 = nums[0], ret = nums[0];
     for (int i = 1; i < nums.size(); ++i) {
         int tmp1 = dp1, tmp2 = dp2;
         dp1 = max(tmp1*nums[i], max(nums[i], tmp2*nums[i]));
         dp2 = min(tmp2*nums[i], min(nums[i], tmp1*nums[i]));
-        res = max(res, dp1);
+        ret = max(ret, dp1);
     }
-    return res;
+    return ret;
 }
 
 

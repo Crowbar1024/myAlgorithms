@@ -23,7 +23,7 @@ int countComponents(int n, vector<vector<int>>& edges) {
 
 // 547 medium 给了一个 n*n 的邻接矩阵，求图中连通图的数量
 int findCircleNum(vector<vector<int>>& isConnected) {
-    int n = isConnected.size(), res = 0;
+    int n = isConnected.size(), ret = 0;
     UFS ufs(n);
     for (int i = 0; i < n; ++i) {
         for (int j = i + 1; j < n; ++j) {
@@ -31,9 +31,9 @@ int findCircleNum(vector<vector<int>>& isConnected) {
         }
     }
     for (int i = 0; i < n; ++i) {
-        if (ufs.find(i) == i) ++res;
+        if (ufs.find(i) == i) ++ret;
     }
-    return res;
+    return ret;
 }
 
 
@@ -139,9 +139,9 @@ int makeConnected_UFS(int n, vector<vector<int>>& connections) {
     for (int i = 0; i < connections.size(); ++i) {
         ufs.unit(connections[i][0], connections[i][1]);
     }
-    int res = count_if(ufs.cnt.begin(), ufs.cnt.end(), 
+    int ret = count_if(ufs.cnt.begin(), ufs.cnt.end(), 
             std::bind(less<int>(), std::placeholders::_1, 0)); // bind2nd(less<int>(), 0) 写法在C17被废除
-    return res-1;
+    return ret-1;
 }
 
 

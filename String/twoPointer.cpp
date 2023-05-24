@@ -34,6 +34,6 @@ string lastSubstring(string s) {
             if (i == j) ++j;
         }
     }
-    int res = min(i, j);
-    return s.substr(res);
+    int ret = min(i, j);
+    return s.substr(ret);
 }

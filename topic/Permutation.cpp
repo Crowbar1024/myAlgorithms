@@ -21,18 +21,18 @@
 class Solution {
 public:
     vector<vector<int>> permute(vector<int>& nums) {
-        vector<vector<int>> res;
-        dfs(nums, 0, res);
-        return res;
+        vector<vector<int>> ret;
+        dfs(nums, 0, ret);
+        return ret;
     }
-    void dfs(vector<int>& nums, int pos, vector<vector<int>>& res) {
+    void dfs(vector<int>& nums, int pos, vector<vector<int>>& ret) {
         if (pos == nums.size()) {
-            res.push_back(nums);
+            ret.push_back(nums);
             return;
         }
         for (int i = pos; i < nums.size(); i++) {  // 同层节点
             swap(nums[i], nums[pos]); // 同层的兄弟节点和第一个老大pos交换位置。比如1-2-x-x遍历完了之后，第2层遍历到了3，交换位置变成 1-3-2
-            dfs(nums, pos+1, res);  // 然后进入第三层，此时3的子树就是由2和4组成
+            dfs(nums, pos+1, ret);  // 然后进入第三层，此时3的子树就是由2和4组成
             swap(nums[i], nums[pos]);  // 兄弟子树遍历完了，换下个兄弟了，得把位置恢复了
         }
     }
@@ -47,15 +47,15 @@ class Solution {
 public:
     vector<int> snap;  // 决策树一条路径
     vector<bool> used;
-    vector<vector<int>> res;
+    vector<vector<int>> ret;
     vector<vector<int>> permute(vector<int>& nums) {
         used.resize(nums.size(), false);
         dfs(nums);
-        return res;
+        return ret;
     }
     void dfs(vector<int>& nums) {
         if (snap.size() == nums.size()) {
-            res.push_back(snap);
+            ret.push_back(snap);
             return;
         }
         for (int i = 0; i < nums.size(); i++) {
@@ -81,16 +81,16 @@ class Solution {
 public:
     vector<int> snap;
     vector<bool> used;
-    vector<vector<int>> res;
+    vector<vector<int>> ret;
     vector<vector<int>> permuteUnique(vector<int>& nums) {
         sort(nums.begin(), nums.end());
         used.resize(nums.size(), false);
         dfs(nums);
-        return res;
+        return ret;
     }
     void dfs(vector<int>& nums) {
         if (snap.size() == nums.size()) {
-            res.emplace_back(snap);
+            ret.emplace_back(snap);
             return;
         }
         for (int i = 0; i < nums.size(); i++) {
@@ -171,15 +171,15 @@ public:
     // 2比5小的是2，就是1*(n-4)!
     // ""比如2小不存在，为0
     int Cantor(string s) {
-        int n = s.length(), res = 0;
+        int n = s.length(), ret = 0;
         for (int i = 0; i < n; ++i) {
             int cnt = 0;  // 在当前位小于当前排列的排列数量
             for (int j = i+1; j < n; ++j) {
                 if (s[j] < s[i]) cnt += 1;
             }
-            res += cnt*fac[n-i-1]; // 康托展开累加
+            ret += cnt*fac[n-i-1]; // 康托展开累加
         }
-        return res;
+        return ret;
     }
 
     // 通过康托展开值得到升序序列s的第k个康托展开排列
@@ -192,14 +192,14 @@ public:
     // 通过以上分析，所求排列组合为 34152。
     string deCantor(string s, int k) {
         int n = s.length();
-        string res(n, '0');
+        string ret(n, '0');
         for (int i = n-1; i >= 0; --i) {
             int cnt = k/fac[i];  // 在第i位之后比第i位小的数的数量
-            res[n-1-i] = s[cnt]; // 注意位置
+            ret[n-1-i] = s[cnt]; // 注意位置
             s.erase(s.begin()+cnt); // 已经用了，删掉原位置这个数
             k %= fac[i];
         }
-        return res;
+        return ret;
     }
 
     string getPermutation(int n, int k) {

@@ -39,17 +39,17 @@ string convert(string s, int numRows) {
     int n = s.size(), r = numRows;
     if (r == 1 || r >= n) return s;
     int t = 2*r-2;
-    string res;
+    string ret;
     for (int i = 0; i < r; ++i) {
         for (int j = 0; i+j < n; j += t) {  // j为每个小周期对应的第一个下标
-            res += s[i+j];  // 每个小周期的第1个
+            ret += s[i+j];  // 每个小周期的第1个
             // 不能是第一行和最后一行（长度为1）
             if (i > 0 && i < r-1 && t+j-i < n) {
-                res += s[t+j-i];  // 每个小周期的第2个
+                ret += s[t+j-i];  // 每个小周期的第2个
             }
         }
     }
-    return res;
+    return ret;
 }
 
 // 59 medium 生成n*n的矩阵，可以顺时针输出[1,n*n]

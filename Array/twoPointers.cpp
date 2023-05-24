@@ -21,16 +21,16 @@ vector<int> twoSum(vector<int>& numbers, int target) {
 // 所以边界调节比较复杂
 int findPairs(vector<int>& nums, int k) {
     sort(nums.begin(), nums.end());
-    int res = 0, n = nums.size();
+    int ret = 0, n = nums.size();
     for (int l = 0, r = 1; l < n-1; ++l) {
         if (l == 0 || nums[l] != nums[l-1]) {  // 跳过l相等的情况
             // 小于才能走，如果写!=，r容易
             while (r<n && (l>=r || nums[r]-nums[l]<k)) ++r;
             // {1,1,3,4,5}0 当l=3，r=4时，上面的while触发不了，所以相等的条件一定得写
-            if (r < n && nums[r]-nums[l] == k) ++res;
+            if (r < n && nums[r]-nums[l] == k) ++ret;
         }
     }
-    return res;
+    return ret;
 }
 // 用哈希表的话，也是一道经典例子，见HASH文件夹
 

@@ -20,7 +20,7 @@ int maximalRectangle(vector<vector<char>>& matrix) {
     vector<int> leftmost(m, 0);
     vector<int> rightmost(m, m-1);
     vector<int> height(m, 0);
-    int res = 0;
+    int ret = 0;
     for (int i = 0; i < n; ++i) {
         int tmp = m-1;  // 记录第i行从右往左遍历时的每一个从0变过来的1的位置
         for (int j = m-1; j >= 0; --j) {
@@ -36,7 +36,7 @@ int maximalRectangle(vector<vector<char>>& matrix) {
             if (matrix[i][j] == '1') {
                 height[j] += 1;
                 leftmost[j] = max(leftmost[j], tmp);
-                res = max(res, (rightmost[j]-leftmost[j]+1)*height[j]);
+                ret = max(ret, (rightmost[j]-leftmost[j]+1)*height[j]);
             } else {
                 height[j] = 0;
                 tmp = j+1;
@@ -44,7 +44,7 @@ int maximalRectangle(vector<vector<char>>& matrix) {
             }
         }
     }
-    return res;
+    return ret;
 }
 
 
@@ -70,7 +70,7 @@ vector<int> DecorativeFence(int n, int k) {
 			up[i][j] = down[j-i+1][j];
 		}
 	}
-    vector<int> res;
+    vector<int> ret;
     // 现在up[i][n],down[i][n]储存了所有的情况，k肯定是位于其中的一个区间，即通过不断减，k<=up/down[i][n]其中的某个数
     int flag, v = 0;
     vector<int> s(n);
@@ -111,7 +111,7 @@ vector<int> DecorativeFence(int n, int k) {
 			}
 			flag ^= 1;
 		}
-		res.emplace_back(s[v]);
+		ret.emplace_back(s[v]);
         // 因为我每次取的v其实只是剩下的一堆数的编号，比如剩下41，是在down[i][2]中取
 		for(int i=v; i<j; ++i) s[i] = s[i+1];  // 删除s[v]
 	}

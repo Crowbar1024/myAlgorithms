@@ -38,22 +38,22 @@ void moveZeroes(vector<int>& nums) {
 
 // 80 medium 非降序，重复的删掉只剩两个
 int removeDuplicates(vector<int>& nums) {
-    int len = nums.size(), cnt = 0, res = 0;
+    int len = nums.size(), cnt = 0, ret = 0;
     for (int i = 1; i < len; i++) {
         if (nums[i]==nums[i-1] && cnt>0) {
             cnt += 1;
             continue;
         } else if (nums[i]==nums[i-1] && cnt==0) {
             cnt += 1;
-            nums[i-res] = nums[i];
+            nums[i-ret] = nums[i];
         } else {
-            if (cnt > 1) res += cnt-1;
-            nums[i-res] = nums[i];
+            if (cnt > 1) ret += cnt-1;
+            nums[i-ret] = nums[i];
             cnt = 0;
         }
     }
-    if (cnt > 1) res += cnt-1;  // 最后是连着的，消不了
-    return len-res;
+    if (cnt > 1) ret += cnt-1;  // 最后是连着的，消不了
+    return len-ret;
 }
 
 

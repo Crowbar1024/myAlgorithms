@@ -40,8 +40,8 @@ int findKthPositive(vector<int>& arr, int k) {
         if (x-mid-1 < k) l = mid+1;
         else r = mid;
     }
-    int res = k+l;
-    return res;
+    int ret = k+l;
+    return ret;
 }
 
 
@@ -52,13 +52,13 @@ int findKthPositive(vector<int>& arr, int k) {
 // 如果要找非降序的话，就用upper_bound
 // 注意这种二分的解法是找不到路径的，DP可以找到路径，虽然这样时间复杂度就上去了
 int lengthOfLIS(vector<int>& nums) {
-    vector<int> res;
+    vector<int> ret;
     for (int i = 0; i != nums.size(); i++) {
-        auto it = lower_bound(res.begin(), res.end(), nums[i]);
-        if (it == res.end()) res.push_back(nums[i]);
+        auto it = lower_bound(ret.begin(), ret.end(), nums[i]);
+        if (it == ret.end()) ret.push_back(nums[i]);
         else *it = nums[i];
     }
-    return res.size();
+    return ret.size();
 }
 // DP解法O(n^2)
 // 以i结尾的最长上升非连续子序列 dp[i] = max(dp[j]+1,dp[i]) for all nums[j] < nums[i]
@@ -123,7 +123,7 @@ double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
     int m = nums1.size(), n = nums2.size();
     if (m > n) return findMedianSortedArrays(nums2, nums1); // 避免j是负数
     int lo = 0, hi = 2*m; // 二分i
-    double res;
+    double ret;
     while (lo <= hi) { // 相等时，res还没算出来，所以还得跑
         int i = lo + (hi - lo) / 2;
         int j = m + n - i;
@@ -134,11 +134,11 @@ double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
         if (l1 > r2) hi = i - 1; // i的大小太大了，注意l1和r1比较没有意义
         else if (l2 > r1) lo = i + 1; // j的大小太大了，即i太小了
         else {
-            res = (min(r1, r2) + max(l1, l2)) / 2.0;
+            ret = (min(r1, r2) + max(l1, l2)) / 2.0;
             break;
         }
     }
-    return res;
+    return ret;
 }
 
 
@@ -230,8 +230,8 @@ struct point {
 };
 double minDis(vector<point>& v) {
     sort(v.begin(), v.end(), [](point& a, point& b){ return a.x<b.x; });
-    double res = find(0, v.size()-1, v);
-    return res/2;
+    double ret = find(0, v.size()-1, v);
+    return ret/2;
 }
 double dist(int a, int b, vector<point>& v) {
 	return sqrt((v[a].x-v[b].x)*(v[a].x-v[b].x) + (v[a].y-v[b].y)*(v[a].y-v[b].y));

@@ -30,32 +30,33 @@ string bigAdd(string s, string t) {
 	return s;
 }
 
-// NC10 大数乘法
-string bigMultiply(string s, string t) {
-    if (s[0] == '0' || t[0] == '0') return string("0");
-    int ls = s.size(), lt = t.size();
-    int len = ls+lt;
-    vector<int> res(len, 0);
-    for (int i = s.size() - 1; i >= 0; --i) {
-        for (int j = t.size() - 1; j >= 0; --j) {
-            res[len-i-j-2] += (s[i]-'0')*(t[j]-'0');
+// 43 medium 大数乘法
+string multiply(string num1, string num2) {
+    if (num1[0] == '0' || num2[0] == '0') return "0";
+    int l1 = num1.size(), l2 = num2.size();
+    int len = l1+l2;
+    vector<int> ret(len, 0);
+    for (int i = l1 - 1; i >= 0; --i) {
+        for (int j = l2 - 1; j >= 0; --j) {
+			// "345" * "16" 数组前面存小的
+            ret[len-i-j-2] += (num1[i]-'0')*(num2[j]-'0');
         }
     }
     for (int i = 0; i < len; ++i) {
-        if (res[i] > 9) {
-            res[i+1] += res[i]/10;
-            res[i] %= 10;
+        if (ret[i] > 9) {
+            ret[i+1] += ret[i]/10;
+            ret[i] %= 10;
         }
     }
-    if (res[len-1] == 0) {
-        res.pop_back();
+    if (ret[len-1] == 0) {
+        ret.pop_back();
         --len;
     }
-    string r(len, '0');
+    string strRet(len, '0');
     for (int i = 0; i < len; ++i) {
-        r[i] = res[len-i-1] + '0';
+        strRet[i] += ret[len-i-1];
     }
-    return r;
+    return strRet;
 }
 
 // 大数阶乘

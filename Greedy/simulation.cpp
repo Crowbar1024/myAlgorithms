@@ -28,15 +28,15 @@ bool lemonadeChange(vector<int>& bills) {
 // a[0] 1*1：36个产品可填满一个箱子
 int roundUp(int m, int n) { return (m+n-1)/n; } // 向上取整
 int filling(vector<int> a) {
-	int res = a[5] + a[4] + a[3] + roundUp(a[2], 4);  // 前三大的只要一个就可以新开一个箱子，接下来由于3*3对4向上取整，所以余数需要用2*2和1*1填充
+	int ret = a[5] + a[4] + a[3] + roundUp(a[2], 4);  // 前三大的只要一个就可以新开一个箱子，接下来由于3*3对4向上取整，所以余数需要用2*2和1*1填充
 	int b[4] = {0, 5, 3, 1};  // 3*3的箱子剩1个，还需要5个2*2；剩2个，需要3个2*2；剩3个，剩1个2*2
 	int left2 = 5*a[3] + b[a[2]%4]; // 和4*4装满的2*2数量，和3*3后空出来的可以装2*2的数量
 	if (a[1] > left2)  // 4*4和3*3剩下的可以用2*2填满
-		res += roundUp(a[1]-left2, 9);  // 剩余的2*2用来填框
-	int left1 = res*36 - a[5]*36 - a[4]*25 - a[3]*16 -a[2]*9 - a[1]*4;
+		ret += roundUp(a[1]-left2, 9);  // 剩余的2*2用来填框
+	int left1 = ret*36 - a[5]*36 - a[4]*25 - a[3]*16 -a[2]*9 - a[1]*4;
 	if (a[0] > left1)
-		res += roundUp(a[0]-left1, 36);  // 作为补充的1*1用完后填空框
-	return res;
+		ret += roundUp(a[0]-left1, 36);  // 作为补充的1*1用完后填空框
+	return ret;
 }
 
 
@@ -47,18 +47,18 @@ int filling(vector<int> a) {
 // 因为最后必然都是平均数，直接从头遍历，大了放到下一个，小了从下一个拿，遍历到n-1
 // 即使是 0 100 3 1 这种极端情况，也成立
 int adjas(vector<int>& nums) {
-    int n = nums.size(), res = 0;
+    int n = nums.size(), ret = 0;
     int avg = accumulate(nums.begin(), nums.end(), 0)/4;
     for (int i = 0; i < nums.size()-1; ++i) {
         if (nums[i] < avg) {
             nums[i+1] -= avg-nums[i];
-            ++res;
+            ++ret;
         } else if (nums[i] > avg) {
             nums[i+1] += nums[i]-avg;
-            ++res;
+            ++ret;
         }
     }
-    return res;
+    return ret;
 }
 
 // 现在要让所有人在夜晚从A跑到B，花费时间cost，路上必须有蜡烛亮着，只有一根蜡烛。

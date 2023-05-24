@@ -4,7 +4,7 @@
 // DFS和BFS的板子应用题
 // 本质上是层序遍历
 vector<string> binaryTreePaths(TreeNode* root) {
-    vector<string> res;
+    vector<string> ret;
     queue<TreeNode*> q;
     queue<string> path;  // 这一步关键
     TreeNode* cur = root;
@@ -15,7 +15,7 @@ vector<string> binaryTreePaths(TreeNode* root) {
         cur = q.front(); q.pop();
         s = path.front(); path.pop();
         if (!cur->left && !cur->right) {
-            res.emplace_back(s);
+            ret.emplace_back(s);
             continue;;
         } 
         if (cur->left) {
@@ -27,7 +27,7 @@ vector<string> binaryTreePaths(TreeNode* root) {
             path.emplace(s + "->" + to_string(cur->right->val));
         }
     }
-    return res;
+    return ret;
 }
 
 

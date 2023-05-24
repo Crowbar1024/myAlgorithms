@@ -8,20 +8,20 @@
 class Solution {
 public:
     vector<vector<string>> solveNQueens(int n) {
-        vector<vector<string>> res;
+        vector<vector<string>> ret;
         vector<string> snap(n, string(n,'.'));
-        dfs(snap, n, 0, res); // 从第0行开始dfs
-        return res;
+        dfs(snap, n, 0, ret); // 从第0行开始dfs
+        return ret;
     }
-    void dfs(vector<string>& snap, int n, int pos, vector<vector<string>>& res) {
+    void dfs(vector<string>& snap, int n, int pos, vector<vector<string>>& ret) {
         if (pos == n) {
-            res.emplace_back(snap);
+            ret.emplace_back(snap);
             return;
         }
         for (int i = 0; i < n; i++) { // 每行挑选一个试试
             if (isValid(pos, i, n, snap)) {
                 snap[pos][i] = 'Q';
-                dfs(snap, n, pos+1, res); // 进入下一行
+                dfs(snap, n, pos+1, ret); // 进入下一行
                 snap[pos][i] = '.';
             }
         }
@@ -247,28 +247,28 @@ bool isValidSudoku(vector<vector<char>>& board) {
 class Solution {
 public:
     unordered_map<string, map<string, int>> myMap;  // 要求dst有序
-    vector<string> res;
+    vector<string> ret;
     vector<string> findItinerary(vector<vector<string>>& tickets) {
         for (auto &ticket : tickets) {
             myMap[ticket[0]][ticket[1]] += 1;  // 到dst的路径+1
         }
-        res.emplace_back("JFK");
+        ret.emplace_back("JFK");
         dfs(tickets);
-        return res;
+        return ret;
     }
     // 由于最终只有一条路径是对的，没有必要遍历完，所以用bool保证中途是对的话，直接不跑了
     bool dfs(vector<vector<string>>& tickets) {
-        if (res.size() == tickets.size()+1) return true;
+        if (ret.size() == tickets.size()+1) return true;
         // 遍历res末尾元素可以到达的dst
         // key不能改，而且是引用。没有const就不能引用，得是复制
-        for (pair<const string, int> &dst : myMap[res.back()]) {
-        // for (auto &dst : myMap[res.back()]) {  // 也行
+        for (pair<const string, int> &dst : myMap[ret.back()]) {
+        // for (auto &dst : myMap[ret.back()]) {  // 也行
             if (dst.second) {
-                res.emplace_back(dst.first);
+                ret.emplace_back(dst.first);
                 dst.second -= 1;
                 if (dfs(tickets)) return true;
                 dst.second += 1;
-                res.pop_back();
+                ret.pop_back();
             }
         }
         return false;  // 中间发小找不到dst的会跑到这一步

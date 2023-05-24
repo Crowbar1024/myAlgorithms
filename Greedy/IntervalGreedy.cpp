@@ -3,13 +3,13 @@
 // 495 easy 提莫Q了多次寒冰（时间非降序），Q的致盲时间为duration，每次Q都会重置致盲时间，一共致盲多久
 // 维护每次致盲时间的右边界
 int findPoisonedDuration(vector<int>& timeSeries, int duration) {
-    int r = timeSeries[0]+duration, res = duration; // 保存最后一次持续时间
+    int r = timeSeries[0]+duration, ret = duration; // 保存最后一次持续时间
     for (int i = 1; i < timeSeries.size(); ++i) {
-        if (r > timeSeries[i]) res += timeSeries[i]-timeSeries[i-1];
-        else res += duration;
+        if (r > timeSeries[i]) ret += timeSeries[i]-timeSeries[i-1];
+        else ret += duration;
         r = timeSeries[i]+duration; // 更新
     }
-    return res;
+    return ret;
 }
 
 
@@ -21,42 +21,42 @@ vector<vector<int>> merge(vector<vector<int>>& intervals) {
         if (p1[0] == p2[0]) return p1[1] < p2[1];
         return p1[0] < p2[0];
     });
-    vector<vector<int>> res;
+    vector<vector<int>> ret;
     int l = intervals[0][0], r = intervals[0][1];
     for (int i = 1; i < intervals.size(); ++i) {
         if (intervals[i][0] > r) { // 当前遍历到了新区间
-            res.emplace_back(vector<int>{l,r}); // 存入老区间
+            ret.emplace_back(vector<int>{l,r}); // 存入老区间
             l = intervals[i][0];
         }
         r = max(r, intervals[i][1]); // 所有情况，1 在内部 2 右边界增大 3 新区间 都只需要判断r是否需要更新就行
     }
-    res.emplace_back(vector<int>{l,r});  // 存入新区间
-    return res;
+    ret.emplace_back(vector<int>{l,r});  // 存入新区间
+    return ret;
 }
 
 // 57 medium 无重叠（端点不重合）的有序排序的区间列表，插入一个新区间，确保列表中的区间仍然有序且不重叠，可以合并区间
 // 难点在于区间合并到最后一个区间时，有多种情况，所以干脆不插入，在不相交时插入重叠后的区间
 vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
     if (intervals.empty()) return vector<vector<int>>{newInterval};
-    vector<vector<int>> res;
+    vector<vector<int>> ret;
     int l = newInterval[0], r = newInterval[1]; // 很巧妙的处理
     bool flag = false; // 重叠后，在下一个不相交插入之前插入重叠的区间
     for (const vector<int>& line : intervals) {
         if (line[1] < l) { // 当前线段在新区见的左侧不相交
-            res.emplace_back(line);
+            ret.emplace_back(line);
         } else if (line[0] > r) { // 当前线段在新区见的右侧不相交
             if (!flag) {
-                res.emplace_back(vector<int>{l, r});
+                ret.emplace_back(vector<int>{l, r});
                 flag = true;
             }
-            res.emplace_back(line);
+            ret.emplace_back(line);
         } else { // 相交的区间
             l = min(l, line[0]);
             r = max(r, line[1]);
         }
     }
-    if (!flag) res.emplace_back(vector<int>{l, r}); // 避免最后一个区间也要重叠
-    return res;
+    if (!flag) ret.emplace_back(vector<int>{l, r}); // 避免最后一个区间也要重叠
+    return ret;
 }
 
 
@@ -99,15 +99,15 @@ vector<int> partitionLabels(string s) {
     int pos[26];
     for (int i = 0; i < s.size(); ++i) pos[s[i]-'a'] = i;
     int l = 0, r = 0;
-    vector<int> res;
+    vector<int> ret;
     for (int i = 0; i < s.size(); ++i) {
         r = max(r, pos[s[i]-'a']);
         if (i == r) { // 当前区间结束
-            res.emplace_back(r-l+1);
+            ret.emplace_back(r-l+1);
             l = i+1;
         }
     }
-    return res;
+    return ret;
 }
 
 // 986 medium 计算两个已经排好序且不相交的区间列表A和B的交集，左右端点重合算一个点区间
@@ -116,15 +116,15 @@ vector<int> partitionLabels(string s) {
 // 所以用两个指针分别指向两个区间列表的区间，慢慢前进
 vector<vector<int>> intervalIntersection(vector<vector<int>>& firstList, vector<vector<int>>& secondList) {
     int p1 = 0, p2 = 0; // 指向区间列表的指针
-    vector<vector<int>> res;
+    vector<vector<int>> ret;
     while (p1 < firstList.size() && p2 < secondList.size()) {
         int r = min(firstList[p1][1], secondList[p2][1]);
         int l = max(firstList[p1][0], secondList[p2][0]);
-        if (l <= r) res.emplace_back(vector<int>{l,r}); // 3种情况：边界重合，部分重合，全部重合
+        if (l <= r) ret.emplace_back(vector<int>{l,r}); // 3种情况：边界重合，部分重合，全部重合
         if (firstList[p1][1] < secondList[p2][1]) ++p1; // r对应的区间前进
         else ++p2;
     }
-    return res;
+    return ret;
 }
 
 

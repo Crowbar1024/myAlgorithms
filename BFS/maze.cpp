@@ -132,8 +132,8 @@ int robotGun(vector<string>& maze) {
             }
         }
     }
-    int res = min(dp[n-1][m-1][0], dp[n-1][m-1][1]);
-    return res==maxn ? -1 : res;
+    int ret = min(dp[n-1][m-1][0], dp[n-1][m-1][1]);
+    return ret==maxn ? -1 : ret;
 }
 
 
@@ -167,14 +167,14 @@ struct State {
 int WhacAMole(vector<vector<int>> mp, int t) {
     int n = mp.size(), m = mp[0].size();
     queue<State> q;
-    int res = 0;
+    int ret = 0;
     q.push((State){1,0,1,(1%mp[1][0])==0,0});  // 先向下走一格
     q.push((State){0,1,1,(1%mp[0][1])==0,1});  // 向右
     while (!q.empty()) {
         State cur = q.front();
         q.pop();
         if (cur.row == n-1 && cur.col == m-1 && cur.time == t) {  // 比较不同路径到达终点的分数
-            res = max(res, cur.score);
+            ret = max(ret, cur.score);
         }
         if (cur.time == t) continue;  // 要么没到终点，出队，要么到了，比较完了，也出队
         for (int i = 0; i < 4; i++) {
@@ -187,7 +187,7 @@ int WhacAMole(vector<vector<int>> mp, int t) {
             }
         }
     }
-    return res;
+    return ret;
 }
 
 

@@ -143,20 +143,20 @@ int rob(vector<int>& nums) {
     for (int i = 2; i < nums.size()-1; ++i) {
         dp1 = exchange(dp2, max(dp2, dp1+nums[i]));
     }
-    int res = dp2;
+    int ret = dp2;
     dp1 = nums[1];
     dp2 = max(nums[1], nums[2]);
     for (int i = 3; i < nums.size(); ++i) {
         dp1 = exchange(dp2, max(dp2, dp1+nums[i]));
     }
-    res = max(res, dp2);
-    return res;
+    ret = max(ret, dp2);
+    return ret;
 }
 // 337 medium 变成树了，相邻节点不能偷 树形DP
 // 后序遍历，统计每个节点偷和不偷的钱
 int rob(TreeNode* root) {
-    pair<int,int> res = robTree(root);
-    return max(res.first, res.second);
+    pair<int,int> ret = robTree(root);
+    return max(ret.first, ret.second);
 }
 pair<int,int> robTree(TreeNode* cur) {
     if (!cur) return {0,0};

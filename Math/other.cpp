@@ -27,8 +27,8 @@ int thenumberof0(vector<int> nums) {
 			cnt5++;
 		}
 	}
-	int res = min(cnt2, cnt5);
-	return res;
+	int ret = min(cnt2, cnt5);
+	return ret;
 }
 
 // 1~n中包含1的个数
@@ -70,13 +70,13 @@ int cntOne(int n) {
 // [3,3,1]
 int delete2357(int n) {
     vector<int> digit{0,1,4,6,8,9};
-    int res = 0, x = 1;
+    int ret = 0, x = 1;
     while (n) {
-        res += digit[n%6]*x;
+        ret += digit[n%6]*x;
         x *= 6;
         n /= 6;
     }
-    return res;
+    return ret;
 }
 
 
@@ -103,19 +103,19 @@ public:
 		return tmp;
 	}
 	int fib(int n) {
-		yhMatrix base, res;
+		yhMatrix base, ret;
 		base.mat[0] = base.mat[1] = base.mat[2] = 1;
 		base.mat[3] = 0;
-		res.mat[0] = res.mat[3] = 1;  // 单位矩阵
-		res.mat[1] = res.mat[2] = 0;
+		ret.mat[0] = ret.mat[3] = 1;  // 单位矩阵
+		ret.mat[1] = ret.mat[2] = 0;
 		while(n) {
 			if(n&1) {
-				res = mul(res, base);
+				ret = mul(ret, base);
 			}
 			base = mul(base,base);
 			n >>= 1;
 		}
-		return res.mat[1];
+		return ret.mat[1];
 	}
 };
 

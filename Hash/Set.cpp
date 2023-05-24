@@ -9,17 +9,17 @@
 // 肯定不能排序，根据题意只能使用哈希表
 int longestConsecutive(vector<int>& nums) {
     unordered_set<int> s(nums.begin(), nums.end());
-    int res = 0;
+    int ret = 0;
     for (const int& num : s) {
         // 没有前缀，所以只有连续的序列的第一个才能进入下面的循环
         if (!s.count(num-1)) {
             int len = 1;
             int suffix = num;
             while (s.count(++suffix)) ++len;
-            res = max(res, len);
+            ret = max(ret, len);
         }
     }
-    return res;
+    return ret;
 }
 
 

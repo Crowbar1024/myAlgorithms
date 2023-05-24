@@ -11,15 +11,15 @@ class Solution {
 public:
     vector<string> digit2char = {"abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
     string snap;
-    vector<string> res;
+    vector<string> ret;
     vector<string> letterCombinations(string digits) {
         if (digits.empty()) return {};
         dfs(0, digits);
-        return res;
+        return ret;
     }
     void dfs(int pos, string& digits) {
         if (snap.size() == digits.size()) {
-            res.emplace_back(snap);
+            ret.emplace_back(snap);
             return;
         }
         for (char &ch : digit2char[digits[pos]-'0'-2]) {
@@ -35,15 +35,15 @@ public:
 // 决策树同一层的子节点为每次可以分割的子串长度，还是组合问题
 class Solution {
 public:
-    vector<vector<string>> res;
+    vector<vector<string>> ret;
     vector<string> snap;
     vector<vector<string>> partition(string s) {
         dfs(0, s);
-        return res;
+        return ret;
     }
     void dfs(int pos, string &s) {
         if (pos == s.size()) {
-            res.emplace_back(snap);
+            ret.emplace_back(snap);
             return;
         }
         for (int i = pos; i < s.size(); ++i) {
@@ -65,45 +65,48 @@ public:
 };
 
 
-// 93 medium 把s分割成合法的IP地址，中间用'.'分割
-// 决策树的子树是当前要分割的长度，最短为1，最长为3。下层就是新的IP段
-// 131使用了substr会创造出额外的空间，这里只用原来的s和下标进行操作，节省了空间
+// 93 medium 字符串s只包含数字，用以表示一个 IP 地址，返回所有可能的有效 IP 地址，中间用'.'分割
+// 尝试不在s中去改。设置一个确定长度的数组seg，并且更新时带有idx信息，所以不需要推缩。
 class Solution {
 public:
-    vector<string> res;
+    static constexpr int SEG_COUNT = 4;
+    vector<string> ret;
+    vector<int> seg; // 数字的4段
     int dotNum = 0;
     vector<string> restoreIpAddresses(string s) {
-        if (s.size() < 4 || s.size() > 12) return res;  // 第一次剪枝
-        dfs(0, s);
-        return res;
+        if (s.size() < SEG_COUNT || s.size() > SEG_COUNT * 3) return ret;
+        seg.resize(SEG_COUNT);
+        dfs(0, 0, s);
+        return ret;
     }
-    void dfs(int pos, string &s) {
-        if (dotNum == 3) {
-            if (isValid(s, pos, s.size()-1)) res.emplace_back(s);
+    void dfs(int segID, int segStart, const string &s) {
+        if (segID == SEG_COUNT) { // 最后一段
+            if (segStart == s.size()) { // 最后一段也遍历完了
+                string snap;
+                for (int i = 0; i < SEG_COUNT; ++i) { // 把seg数组的四个数字写到res
+                    snap += to_string(seg[i]);
+                    if (i < SEG_COUNT - 1) snap += '.';
+                }
+                ret.emplace_back(std::move(snap));
+            }
             return;
         }
-        // 第二次剪枝
-        for (int i = pos; i < s.size() && i < pos+3; ++i) {
-            if (isValid(s, pos, i)) {
-                s.insert(s.begin()+i+1, '.');
-                dotNum += 1;
-                dfs(i+2, s);  // 因为加了一个点，所以需要再+1
-                s.erase(s.begin()+i+1);
-                dotNum -= 1;
-            } else break;  // 第三次剪枝，因为这一层的分层失败，全部不算了
+        if (segStart == s.size()) return;
+        if (s[segStart] == '0') {
+            seg[segID] = 0;
+            dfs(segID + 1, segStart + 1, s);
+            return;
+        }
+        int segSum = 0;
+        for (int cur = segStart; cur < s.size() && cur < segStart + 3; ++cur) {
+            segSum = segSum * 10 + (s[cur] - '0');
+            if (segSum > 255) break;
+            else {
+                seg[segID] = segSum; // 带有idx信息，不需要推缩。
+                dfs(segID + 1, cur + 1, s);
+            }
         }
     }
-    bool isValid(string& s, int l, int r) {
-        if (l == s.size()) return false;  // 最后一个为空的情况
-        if (s[l] == '0' && l != r) return false;  // 只有单独一个的0才会考虑
-        int sum = 0;
-        for (int i = l; i <= r; ++i) {  // [l,r]
-            sum = sum*10 + s[i] - '0';
-            if (sum > 255) return false;  // 函数内部直接返回更快
-        }
-        return true;
-    }
-
 };
 
 

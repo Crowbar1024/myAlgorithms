@@ -10,14 +10,14 @@ vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
     if (nums1.size() > nums2.size()) return intersect(nums2, nums1);
     unordered_map<int, int> m;
     for (const int& n : nums1) m[n]++;
-    vector<int> res;
+    vector<int> ret;
     for (const int& n : nums2) {
         if (m.count(n) && m[n] > 0) {
             m[n] -= 1;
-            res.emplace_back(n);
+            ret.emplace_back(n);
         }
     }
-    return res;
+    return ret;
 }
 // easy 349 如果结果要求不重复即unique，就用set统计
 // 如果给定的数组已经排好序呢？你将如何优化你的算法？—— 双指针分别指向数组的开头
@@ -75,18 +75,18 @@ bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
 // 虽然是查pair，但每次消掉自己，且对+k和-k的做记录，能保证数对个数不变
 int findPairs(vector<int>& nums, int k) {
     unordered_map<int,int> cnt;
-    int res = 0;
+    int ret = 0;
     for (const int& n : nums) cnt[n] += 1;
     for (const int& n : nums) {
         if (cnt[n] == 0) continue;  // 之前记录过了
         if (k == 0) {  // 自己重复
-            if (cnt[n] > 1) ++res;
+            if (cnt[n] > 1) ++ret;
         } else {
-            if (cnt[n-k]) ++res;
-            if (cnt[n+k]) ++res;
+            if (cnt[n-k]) ++ret;
+            if (cnt[n+k]) ++ret;
         }
         cnt[n] = 0;
     }
-    return res;
+    return ret;
 }
 

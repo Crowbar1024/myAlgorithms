@@ -187,13 +187,13 @@ int communications(vector<int> a) {
     int index = (maxIndex+1)%n;
     stack<pair<int,int>> s;
     s.push({maxValue, 1});
-    int res = 0;
+    int ret = 0;
     while (index != maxIndex) {
         int newValue = a[index];
         while (s.top().first < newValue) {  // 把小于新的数的全部弹出
             int times = s.top().second;
             s.pop();
-            res += times*(times-1)/2 + times*2;
+            ret += times*(times-1)/2 + times*2;
         }
         if (s.top().first == newValue) {
             s.top().second += 1;
@@ -205,15 +205,15 @@ int communications(vector<int> a) {
     while (!s.empty()) {  // 此时是从大到小的单调栈
         int times = s.top().second;
         s.pop();
-        res += times*(times-1)/2;  // 内部
+        ret += times*(times-1)/2;  // 内部
         if (!s.empty()) {
-            res += times;
+            ret += times;
             if (s.size() > 1) {
-                res += times;
+                ret += times;
             } else {
-                res += s.top().second>1 ? times : 0;
+                ret += s.top().second>1 ? times : 0;
             }
         }
     }
-    return res;
+    return ret;
 }

@@ -10,16 +10,16 @@
 // 所以为了避免{2,5} {5,2}这种只有两个点的情况，默认第一个点double，直接删除第一个点，保留第0个点
 int wiggleMaxLength(vector<int>& nums) {
     int curDiff = 0, preDiff = 0;
-    int res = 1;  // 第一个点默认是峰
+    int ret = 1;  // 第一个点默认是峰
     for (int i = 1; i < nums.size(); ++i) {
         curDiff = nums[i] - nums[i-1];
         // preDiff为0是初始值的情况，赋值之后不为0
         if ((curDiff > 0 && preDiff <= 0) || (curDiff < 0 && preDiff >= 0)) {
-            ++res;
+            ++ret;
             preDiff = curDiff;
         }
     }
-    return res;
+    return ret;
 }
 
 

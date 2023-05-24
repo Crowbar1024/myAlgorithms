@@ -5,12 +5,12 @@
 // 53 medium 最大子串和（有负数）
 // 以i结尾的连续子数组的最大和dp[i] = max(nums[i], dp[i-1]+nums[i])
 int maxSubArray(vector<int>& nums) {
-    int dp = 0, res = INT_MIN;
+    int dp = 0, ret = INT_MIN;
     for (int i = 0; i < nums.size(); ++i) {
         dp = max(nums[i], dp+nums[i]);
-        res = max(dp, res);
+        ret = max(dp, ret);
     }
-    return res;
+    return ret;
 }
 // 衍生问题
 // 1给定一个数组，值为正，返回累加和为给定值k的最长子数组长度（使用滑动窗口可解）
@@ -22,19 +22,19 @@ int maxSubArray(vector<int>& nums) {
 int maxLength(vector<int>& a, int k) {
     if (a.empty()) return 0;
     int n = a.size();
-    int sum = 0, res = 0;
+    int sum = 0, ret = 0;
     unordered_map<int,int> m;
     m[0] = -1;
     for (int i=0; i<n; ++i) {
         sum += a[i];
         if (m.count(sum-k)) {
-            res = max(res, i-m[sum-k]);
+            ret = max(ret, i-m[sum-k]);
         }
         if (!m.count(sum)) {
             m[sum] = i;
         }
     }
-    return res;
+    return ret;
 }
 
 
@@ -72,7 +72,7 @@ int minSumAndIndex(vector<int>& a, int k) {
     }
     int end = 0;  // 几个累加和小于k的块的下一个
     int sum = 0;
-    int res = 0;
+    int ret = 0;
     for (int i=0; i<n; ++i) {
         while (end<n && sum+minSum[end]<=k) {
             sum += minSum[end];
@@ -80,11 +80,11 @@ int minSumAndIndex(vector<int>& a, int k) {
         }
         //这里是为了防止刚开始的时候end==i,就不满足，这样sum没有被加过，所以一直为0，所以不需要减去任何值
         sum -= end > i ? a[i] : 0;
-        res = max(res, end - i);
+        ret = max(ret, end - i);
         //这里是为了防止刚开始的时候end==i,需要把end值往后移动一个位置，向右扩展。i是自增的
         end = max(end, i + 1);
     }
-    return res;
+    return ret;
 }
 
 

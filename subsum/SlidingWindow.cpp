@@ -80,28 +80,28 @@ int equalSubstring(string s, string t, int maxCost) {
 // 正常思路是set+滑动窗口
 int lengthOfLongestSubstring(string s) {
     unordered_set<char> digitSet;
-    int res = 0;
+    int ret = 0;
     for (int l = 0, r = 0; r < s.size(); ++r) {
         while (digitSet.count(s[r]) > 0 && l < r) { // 一直删除l，直到不重复
             digitSet.erase(s[l++]);
         }
         digitSet.insert(s[r]);
-        res = max(res, r-l+1);
+        ret = max(ret, r-l+1);
     }
-    return res;
+    return ret;
 }
 // 但是有个低效的地方，右边界重复的情况下，得一直删除左边界并前进
 // 可以用map记下每个字符的索引，直接进行跳转
 int lengthOfLongestSubstring(string s) {
     unordered_map<char,int> pos; // 右边界字符第一次出现的位置
-    int res = 0;
+    int ret = 0;
     for (int l = 0, r = 0; r < s.size(); ++r) {
         // 右边界重复，左边界就直接跳到右边界字符第一次出现的下一个
         if (pos.count(s[r]) > 0) l = max(l, pos[s[r]]+1);
         pos[s[r]] = r; // 更新
-        res = max(res, r-l+1);
+        ret = max(ret, r-l+1);
     }
-    return res;
+    return ret;
 }
 
 
@@ -209,7 +209,7 @@ vector<int> findAnagrams(string s, string p) {
     for (char ch = 'a'; ch <= 'z'; ++ch) pm[ch] = 0;
     for (char ch : p) pm[ch] += 1;
     unordered_map<char,int> wd;
-    vector<int> res;
+    vector<int> ret;
     while (r < s.size()) {
         wd[s[r]] += 1;
         // 只要wd多了，或者pm[s[r]]==0，就可以l前移
@@ -220,28 +220,28 @@ vector<int> findAnagrams(string s, string p) {
             ++l;
         }
         if (r-l+1 == len) {
-            res.emplace_back(l);
+            ret.emplace_back(l);
         }
         ++r;
     }
-    return res;
+    return ret;
 }
 
 
 // easy 674 最长严格上升子串长度，DP也能做
 int findLengthOfLCIS(vector<int>& nums) {
-    int l = 0, r = 0, res = 1;
+    int l = 0, r = 0, ret = 1;
     for (int i = 1; i < nums.size(); ++i) {
         if (nums[i] > nums[r]) ++r;
         else l = r = i;
-        res = max(r-l+1, res);  // 每次都要更新，避免一直都是严格递增，导致没有机会更新
+        ret = max(r-l+1, ret);  // 每次都要更新，避免一直都是严格递增，导致没有机会更新
     }
-    return res;
+    return ret;
 }
 // 1839 meidum  所有元音按顺序排布的最长子字符串
 // 只包括 a e i o u，所以边判断是否大于等于边记录种类数就行
 int longestBeautifulSubstring(string word) {
-    int l = 0, r = 0, res = 0, cnt = 1;
+    int l = 0, r = 0, ret = 0, cnt = 1;
     for (int i = 1; i < word.size(); ++i) {
         if (word[i] > word[r]) {
             ++r;
@@ -252,9 +252,9 @@ int longestBeautifulSubstring(string word) {
             l = r = i;
             cnt = 1;
         }
-        if (cnt == 5) res = max(r-l+1, res);
+        if (cnt == 5) ret = max(r-l+1, ret);
     }
-    return res;
+    return ret;
 }
 
 

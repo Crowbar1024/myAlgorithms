@@ -2,7 +2,7 @@
 
 // 547 medium 给了一个 n*n 的邻接矩阵，求图中连通图的数量
 int findCircleNum(vector<vector<int>>& isConnected) {
-    int n = isConnected.size(), res = 0;
+    int n = isConnected.size(), ret = 0;
     vector<bool> isVisit(n, false);
     queue<int> q;
     for (int i = 0; i < n; ++i) {
@@ -17,7 +17,7 @@ int findCircleNum(vector<vector<int>>& isConnected) {
                 }
             }
         }
-        ++res;
+        ++ret;
     }
-    return res;
+    return ret;
 }

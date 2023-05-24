@@ -3,41 +3,41 @@
 // 257 easy 输出二叉树的所有路径（root-叶子节点）
 // 典型的DFS和BFS都能轻易解决的问题
 vector<string> binaryTreePaths(TreeNode* root) {
-    vector<string> res;
+    vector<string> ret;
     string path = "";
-    dfs(path, root, res);
-    return res;
+    dfs(path, root, ret);
+    return ret;
 }
-void dfs(string& path, TreeNode* cur, vector<string>& res) {
+void dfs(string& path, TreeNode* cur, vector<string>& ret) {
     if (!cur) return;
     string s = to_string(cur->val);
     path += s;
     if (!cur->left && !cur->right) {
-        res.emplace_back(path);
+        ret.emplace_back(path);
     } else {
         // 选择列表只有两个
         path += "->";
-        dfs(path, cur->left, res);
+        dfs(path, cur->left, ret);
         if (cur->left) path.erase(path.end()-to_string(cur->left->val).size()-2, path.end());
         else path.erase(path.end()-2, path.end());
 
         path += "->";
-        dfs(path, cur->right, res);
+        dfs(path, cur->right, ret);
         if (cur->right) path.erase(path.end()-to_string(cur->right->val).size()-2, path.end());
         else path.erase(path.end()-2, path.end());
     }
 }
 // 没有引用的做法，效率略低于上面
-void dfs(string path, TreeNode* cur, vector<string>& res) {
+void dfs(string path, TreeNode* cur, vector<string>& ret) {
     if (!cur) return;
     string s = to_string(cur->val);
     path += s;
     if (!cur->left && !cur->right) {
-        res.emplace_back(path);
+        ret.emplace_back(path);
     } else {
         path += "->";
-        dfs(path, cur->left, res);
-        dfs(path, cur->right, res);
+        dfs(path, cur->left, ret);
+        dfs(path, cur->right, ret);
     }
 }
 // 考虑一下两种方法的时间复杂度，显然都是O(n^2)级别的
@@ -58,25 +58,25 @@ void dfs(string path, TreeNode* cur, vector<string>& res) {
 // 小问题，没说没有负数，所以剪枝没有必要
 vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
     if (!root) return vector<vector<int>>{};
-    vector<vector<int>> res;
+    vector<vector<int>> ret;
     vector<int> path;
     TreeNode *cur = root;
-    dfs(res, cur, targetSum, path);
-    return res;
+    dfs(ret, cur, targetSum, path);
+    return ret;
 }
-void dfs(vector<vector<int>>& res, TreeNode* cur, int sum, vector<int>& path) {
+void dfs(vector<vector<int>>& ret, TreeNode* cur, int sum, vector<int>& path) {
     path.push_back(cur->val);
     sum -= cur->val;
     if (!cur->left && !cur->right) {
-        if (!sum) res.push_back(path);
+        if (!sum) ret.push_back(path);
         return;
     }
     if (cur->left) {
-        dfs(res, cur->left, sum, path);
+        dfs(ret, cur->left, sum, path);
         path.pop_back();
     }
     if (cur->right) {
-        dfs(res, cur->right, sum, path);
+        dfs(ret, cur->right, sum, path);
         path.pop_back();
     }
 }
@@ -87,14 +87,14 @@ int sumOfLeftLeaves(TreeNode* root) {
     return dfs(root);
 }
 int dfs(TreeNode* cur) {
-    int res = 0;
+    int ret = 0;
     if (cur->left) {
-        res += isLeaf(cur->left) ? cur->left->val : dfs(cur->left);
+        ret += isLeaf(cur->left) ? cur->left->val : dfs(cur->left);
     }
     if (cur->right) {
-        res += isLeaf(cur->right) ? 0 : dfs(cur->right);
+        ret += isLeaf(cur->right) ? 0 : dfs(cur->right);
     }
-    return res;
+    return ret;
 }
 bool isLeaf(TreeNode* cur) {
     return !cur->left && !cur->right;

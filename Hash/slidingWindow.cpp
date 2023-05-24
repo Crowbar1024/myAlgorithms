@@ -7,7 +7,7 @@
 int totalFruit(vector<int>& fruits) {
     unordered_map<int,int> cnt;
     int l = 0, r = 0, len = fruits.size();
-    int res = 0;
+    int ret = 0;
     while (r < len) {
         // 可以直接放，因为map可以统计size
         cnt[fruits[r]] += 1;
@@ -18,10 +18,10 @@ int totalFruit(vector<int>& fruits) {
             }
             ++l;
         }
-        res = max(res, r-l+1);
+        ret = max(ret, r-l+1);
         ++r;
     }
-    return res;
+    return ret;
 }
 
 // 76 hard 字符串s、字符串t。返回s中涵盖t所有字符的最小子串。如果s中不存在涵盖t所有字符的子串，则返回空字符串 
@@ -35,7 +35,7 @@ string minWindow(string s, string t) {
     }
     int tsum = t.size();
     int l = 0, r = 0, len = s.size();
-    int res = len+1;  // len显然是错的
+    int ret = len+1;  // len显然是错的
     string strRes = "";
     while (r < len) {
         if (cnt.count(s[r]) > 0) {
@@ -46,9 +46,9 @@ string minWindow(string s, string t) {
             cnt[s[r]] -= 1;  // 该值是可能为负的
         }
         while (tsum == 0) {
-            if (res >= r-l+1) {
-                res = r-l+1;
-                strRes = s.substr(l, res);
+            if (ret >= r-l+1) {
+                ret = r-l+1;
+                strRes = s.substr(l, ret);
             }
             if (cnt.count(s[l])) {
                 if (cnt[s[l]] == 0) {

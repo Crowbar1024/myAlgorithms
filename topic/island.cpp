@@ -8,7 +8,7 @@
 int numIslands(vector<vector<char>>& grid) {
     const vector<vector<int>> dir{{-1,0},{0,1},{1,0},{0,-1}};
     int m = grid.size(), n = grid[0].size();
-    int res = 0;
+    int ret = 0;
     for (int i = 0; i < m; ++i) {
         for (int j = 0; j < n; ++j) {
             if (grid[i][j] == '1') {
@@ -26,11 +26,11 @@ int numIslands(vector<vector<char>>& grid) {
                         }
                     }
                 }
-                res += 1; // 一个联通分量遍历完了
+                ret += 1; // 一个联通分量遍历完了
             }
         }
     }
-    return res;
+    return ret;
 }
 // DFS一样可以做
 class Solution {
@@ -39,17 +39,17 @@ public:
     int m, n;
     int numIslands(vector<vector<char>>& grid) {
         m = grid.size(), n = grid[0].size();
-        int res = 0;
+        int ret = 0;
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (grid[i][j] == '1') {
                     grid[i][j] = '0';
                     dfs(grid, i, j);
-                    res += 1;
+                    ret += 1;
                 }
             }
         }
-        return res;
+        return ret;
     }
     void dfs(vector<vector<char>>& grid, int x, int y) {
         for (int i = 0; i < 4; ++i) {
@@ -71,16 +71,16 @@ public:
     int m, n;
     int maxAreaOfIsland(vector<vector<int>>& grid) {
         m = grid.size(), n = grid[0].size();
-        int res = 0;
+        int ret = 0;
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (grid[i][j] == 1) {
                     grid[i][j] = 0;
-                    res = max(res, dfs(grid, i, j));
+                    ret = max(ret, dfs(grid, i, j));
                 }
             }
         }
-        return res;
+        return ret;
     }
     int dfs(vector<vector<int>>& grid, int x, int y) {
         int snap = 1;
@@ -99,7 +99,7 @@ public:
 int maxAreaOfIsland(vector<vector<int>>& grid) {
     const vector<vector<int>> dir{{-1,0},{0,1},{1,0},{0,-1}};
     int m = grid.size(), n = grid[0].size();
-    int res = 0;
+    int ret = 0;
     for (int i = 0; i < m; ++i) {
         for (int j = 0; j < n; ++j) {
             if (grid[i][j] == 1) {
@@ -119,11 +119,11 @@ int maxAreaOfIsland(vector<vector<int>>& grid) {
                         }
                     }
                 }
-                res = max(res, snap);
+                ret = max(ret, snap);
             }
         }
     }
-    return res;
+    return ret;
 }
 
 // 827 hard 最大人工岛 grid是n*n。最多只能将一格 0 变成 1。返回执行此操作后，grid 中最大的岛屿面积是多少？
@@ -150,7 +150,7 @@ public:
             }
         }
         if (sqv.empty()) return 1;  // 没有岛屿
-        int res = *max_element(sqv.begin(), sqv.end());
+        int ret = *max_element(sqv.begin(), sqv.end());
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (seqv[i][j] == 0) {  // 海水
@@ -165,11 +165,11 @@ public:
                         used.insert(seq);
                         tmp += sqv[seq-1];  // 从1开始
                     }
-                    res = max(res, tmp);
+                    ret = max(ret, tmp);
                 }
             }
         }
-        return res;
+        return ret;
     }
     int dfs(vector<vector<int>>& grid, vector<vector<int>>& seqv, int x, int y) {
         int sq = 1;
@@ -207,19 +207,19 @@ public:
         return 0;  // 没有岛屿
     }
     int dfs(vector<vector<int>>& grid, int x, int y) {
-        int res = 0;
+        int ret = 0;
         for (int i = 0; i < 4; ++i) {
             int nx = x+dir[i], ny = y+dir[i+1];
             if (nx < 0 || nx >= m || ny < 0 || ny >= n) {
-                res += 1;
+                ret += 1;
             } else if (grid[nx][ny] == 0) {
-                res += 1;  // 同一格海水可以重复计算
+                ret += 1;  // 同一格海水可以重复计算
             } else if (grid[nx][ny] == 1) {
                 grid[nx][ny] = 2;  // 避免陆地一直回溯
-                res += dfs(grid, nx, ny);
+                ret += dfs(grid, nx, ny);
             }
         }
-        return res;
+        return ret;
     }
 };
 

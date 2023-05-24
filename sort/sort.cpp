@@ -234,25 +234,25 @@ int maxGap(vector<int> nums) {
 		haveNum[bid] = 1;
 	}
 	int lastMax = maxBucket[0];
-	int res = 0;
+	int ret = 0;
 	for (int i = 1; i <= len; i++) {
 		if (haveNum[i]) {
-			res = max(res, minBucket[i] - lastMax);
+			ret = max(ret, minBucket[i] - lastMax);
 			lastMax = maxBucket[i];
 		}
 	}
-	return res;
+	return ret;
 }
 
 // 同理可以生成随机字符串
 // rand() % (b-a) + a: [a,b)
 vector<int> generateRandomArray(int size, int bound) {
 	int trueSize = rand() % (size + 1);    // [0, size]
-	vector<int> res(trueSize);
+	vector<int> ret(trueSize);
 	for (int i = 0; i<trueSize; i++) {
-		res[i] = rand() % (bound + 1);    // [0, bound]
+		ret[i] = rand() % (bound + 1);    // [0, bound]
 	}
-	return res;
+	return ret;
 }
 
 bool judgeEqual(vector<int> a, vector<int> b) {

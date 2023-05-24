@@ -5,14 +5,14 @@
 // 目标是使用最少的跳跃次数到达数组的最后一个位置。（假设总是可以到达数组的最后一个位置）
 int jump(vector<int>& nums) {
     if (nums.size() == 1) return 0;
-    int up = 0, cur = 0, res = 0; // up维护了每次能达到的最远位置；cur用来每次更新跳跃次数res
+    int up = 0, cur = 0, ret = 0; // up维护了每次能达到的最远位置；cur用来每次更新跳跃次数res
     for (int i = 0; i < nums.size()-1; i++) { // 遍历到终点前的一个位置
         up = max(up, i+nums[i]); // [0:i]能达到的最远距离
         // 2 100 1，当遍历到100时，此前2的位置跳到1，但100位置可以直接跳到终点，所以2跳到100的位置再跳终点
-        if (up >= nums.size()-1) return ++res;
+        if (up >= nums.size()-1) return ++ret;
         if (i == cur) { // 当前已经遍历到之前能达到的最远位置
             cur = up; // 更新cur
-            res++;
+            ret++;
         }
     }
     return -1; // 不会运行到这
@@ -44,13 +44,13 @@ bool canReach(vector<int>& arr, int start) {
 bool dfs(vector<int>& arr, int pos) {
     if (arr[pos] < 0) return false;
     arr[pos] = -arr[pos];  // 这个节点访问过了
-    bool res = (arr[pos] == 0);
+    bool ret = (arr[pos] == 0);
     for (int i = 0; i < 2; i++) {
         int newPos = pos + (2*i-1)*arr[pos];
         if (newPos >= 0 && newPos < arr.size()) {
-            res = res || dfs(arr, newPos);  // 注意这里不需要做把选择列表取出和送回
+            ret = ret || dfs(arr, newPos);  // 注意这里不需要做把选择列表取出和送回
             // 因为这道题没有路径之说，只需要遍历完所有节点就行，所以时间复杂度为On
         }
     }
-    return res;
+    return ret;
 }

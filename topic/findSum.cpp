@@ -20,7 +20,7 @@ vector<vector<int>> threeSum(vector<int>& nums) {
     int n = nums.size();
     if (n < 3) return {};
     sort(nums.begin(), nums.end());
-    vector<vector<int>> res;
+    vector<vector<int>> ret;
     for (int i = 0; i < n-2; ++i) {  // 第一个
         if (i > 0 && nums[i] == nums[i-1]) continue; // 去重
         if (nums[i]+nums[n-2]+nums[n-1] < 0) continue; // i太小
@@ -30,14 +30,14 @@ vector<vector<int>> threeSum(vector<int>& nums) {
             if (nums[l]+nums[r] < -nums[i]) ++l;
             else if (nums[l]+nums[r] > -nums[i]) --r;
             else {
-                res.emplace_back(vector<int>{nums[i],nums[l],nums[r]});
+                ret.emplace_back(vector<int>{nums[i],nums[l],nums[r]});
                 ++l; --r; // 开始下一次循环
                 while (l < r && nums[l] == nums[l-1]) ++l; // 去重
                 while (l < r && nums[r] == nums[r+1]) --r;
             }
         }
     }
-    return res;
+    return ret;
 }
 
 // 16 medium 最接近的三数之和，可大可小。有唯一解，返回这三个数的和。
@@ -47,7 +47,7 @@ vector<vector<int>> threeSum(vector<int>& nums) {
 int threeSumClosest(vector<int>& nums, int target) {
     int n = nums.size();
     sort(nums.begin(), nums.end());
-    int res = 1e5; // 要很大或很小，第一次更新要中
+    int ret = 1e5; // 要很大或很小，第一次更新要中
     for (int i = 0; i < n-2; ++i) {  // 第一个
         if (i > 0 && nums[i] == nums[i-1]) continue; // 去重
         int l = i+1, r = n-1; // 后面两个
@@ -56,10 +56,10 @@ int threeSumClosest(vector<int>& nums, int target) {
             if (sum < target) ++l;
             else if (sum > target) --r;
             else return target;
-            if (abs(res-target) > abs(sum-target)) res = sum;
+            if (abs(ret-target) > abs(sum-target)) ret = sum;
         }
     }
-    return res;
+    return ret;
 }
 
 // 18 medium 四数之和，和三数之和一样的条件
@@ -68,7 +68,7 @@ int threeSumClosest(vector<int>& nums, int target) {
 vector<vector<int>> fourSum(vector<int>& nums, int target) {
     int n = nums.size();
     sort(nums.begin(), nums.end());
-    vector<vector<int>> res;
+    vector<vector<int>> ret;
     for (int i = 0; i < n-3; ++i) {  // 第1个
         if (i > 0 && nums[i] == nums[i-1]) continue;
         if ((long) nums[i]+nums[n-3]+nums[n-2]+nums[n-1] < target) continue;
@@ -82,7 +82,7 @@ vector<vector<int>> fourSum(vector<int>& nums, int target) {
                 if ((long) nums[l]+nums[r]+nums[i]+nums[j] < target) ++l;
                 else if ((long) nums[l]+nums[r]+nums[i]+nums[j] > target) --r;
                 else {
-                    res.emplace_back(vector<int>{nums[i],nums[j],nums[l],nums[r]});
+                    ret.emplace_back(vector<int>{nums[i],nums[j],nums[l],nums[r]});
                     ++l; --r;
                     while (l < r && nums[l] == nums[l-1]) ++l;
                     while (l < r && nums[r] == nums[r+1]) --r;
@@ -90,7 +90,7 @@ vector<vector<int>> fourSum(vector<int>& nums, int target) {
             }
         }
     }
-    return res;
+    return ret;
 }
 
 // 454 medium 四数之和 数组长度都是 n ，请你计算有多少个元组 nums1[i] + nums2[j] + nums3[k] + nums4[l] == 0

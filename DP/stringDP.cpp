@@ -75,7 +75,7 @@ string longestCommonSubsequencePath(string text1, string text2) {
 int findLength(vector<int>& nums1, vector<int>& nums2) {
     int l1 = nums1.size(), l2 = nums2.size();
     vector<int> dp(l2+1, 0);  // 不能是l2+1
-    int res = 0;
+    int ret = 0;
     for (int i = 1; i <= l1; ++i) {
         int prev = 0;  // 上一行的第0列不存在，设置0
         for (int j = 1; j <= l2; ++j) {
@@ -83,24 +83,24 @@ int findLength(vector<int>& nums1, vector<int>& nums2) {
             if (nums1[i-1] == nums2[j-1]) dp[j] = prev+1;
             else dp[j] = 0;
             prev = tmp;
-            res = max(res, dp[j]);
+            ret = max(ret, dp[j]);
         }
     }
-    return res;
+    return ret;
 }
 // 翻转遍历顺序以节省变量
 int findLength(vector<int>& nums1, vector<int>& nums2) {
     int l1 = nums1.size(), l2 = nums2.size();
     vector<int> dp(l2+1, 0);  // 不能是l2+1
-    int res = 0;
+    int ret = 0;
     for (int i = 1; i <= l1; ++i) {
         for (int j = l2; j >= 1; --j) {
             if (nums1[i-1] == nums2[j-1]) dp[j] = dp[j-1]+1;
             else dp[j] = 0;
-            res = max(res, dp[j]);
+            ret = max(ret, dp[j]);
         }
     }
-    return res;
+    return ret;
 }
 // 滑动窗口解法，即使两把尺子一开始接触到离开，A尺子屁股接触B的头
 // 相遇的长度先增大再减小，每次在相遇部分遍历（长度相同，所以不同就从0开始）
@@ -108,14 +108,14 @@ int findLength(vector<int>& nums1, vector<int>& nums2) {
 // 第一次对比1个，A[m-1]和B[0]
 // 第二次对比2个，A[m-2]和B[0]，A[m-1]和B[1]
 int findLength(vector<int>& A, vector<int>& B) {
-    int m = A.size(), n = B.size(), res = 0;
+    int m = A.size(), n = B.size(), ret = 0;
     for(int diff = -(m - 1); diff <= n - 1; ++diff) { // 枚举对应关系
         for(int i = max(0, -diff), l = 0; i < min(m, n - diff); ++i) { // 遍历公共部分
             l = (A[i] == B[i + diff])? (l + 1) : 0;
-            res = max(res, l);
+            ret = max(ret, l);
         }
     }
-    return res;
+    return ret;
 }
 // HJ65 查找两个字符串a,b中的最长公共子串。若有多个，输出在较短串中最先出现的那个。
 // 因为状态压缩了，只有j的记录，所以最短串是谁呢？
@@ -124,18 +124,18 @@ int findLength(vector<int>& A, vector<int>& B) {
 string findLength(string& nums1, string& nums2) {
     int l1 = nums1.size(), l2 = nums2.size();
     vector<vector<int>> dp(l1+1, vector<int>(l2+1,0));
-    int res = 0, pos = 0;
+    int ret = 0, pos = 0;
     for (int i = 1; i <= l1; ++i) {
         for (int j = 1; j <= l2; ++j) {
             if (nums1[i-1] == nums2[j-1]) dp[i][j] = dp[i-1][j-1]+1;
             else dp[i][j] = 0;
-            if (dp[i][j] > res) {
+            if (dp[i][j] > ret) {
                 pos = i;  // 是取不到的，所以减长度是起始位置。
-                res = dp[i][j];
+                ret = dp[i][j];
             }
         }
     }
-    return nums1.substr(pos-res,res);
+    return nums1.substr(pos-ret,ret);
 }
 
 
@@ -152,7 +152,7 @@ string findLength(string& nums1, string& nums2) {
 int maxBracketLength(string s) {
     int n = s.size();
     vector<int> dp(n,0);
-    int res = 0;
+    int ret = 0;
     for (int i=1; i<s.size(); ++i) {
         if (s[i] == ')') {
             int pre = i-1-dp[i-1];  // 找到那个与s[i]相匹配的左括号
@@ -160,9 +160,9 @@ int maxBracketLength(string s) {
                 dp[i] = dp[i-1] + 2 + (pre>0 ? dp[pre-1] : 0);
             }
         }
-        res = max(res, dp[i]);
+        ret = max(ret, dp[i]);
     }
-    return res;
+    return ret;
 }
 
 
@@ -306,14 +306,14 @@ bool isMatch(string s, string p) {
 // 这道题的思路就是利用LCS，最长公共子序列，不过这里要得到它，即需要知道DP的路径
 string shortestCommonSupersequence(string &str1, string &str2) {
     string lcs = longestCommonSubsequence(str1, str2);
-    string res = "";
+    string ret = "";
     int i = 0, j = 0;
     for (auto c = lcs.begin(); c != lcs.end(); c++, i++, j++) {
-        while (*c != str1[i]) res += str1[i++];
-        while (*c != str2[j]) res += str2[j++];
-        res += *c;
+        while (*c != str1[i]) ret += str1[i++];
+        while (*c != str2[j]) ret += str2[j++];
+        ret += *c;
     }
-    return res + str1.substr(i) + str2.substr(j);
+    return ret + str1.substr(i) + str2.substr(j);
 }
 string longestCommonSubsequence(string text1, string text2) {
     int n1 = text1.size(), n2 = text2.size();

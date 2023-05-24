@@ -12,19 +12,19 @@ struct node {
 vector<vector<int>> kSmallestPairs(vector<int>& nums1, vector<int>& nums2, int k) {
     int m = nums1.size(), n = nums2.size();
     priority_queue<node> pq;
-    vector<vector<int>> res;
+    vector<vector<int>> ret;
     for (int i = 0; i < m; ++i) {
         pq.push(node{i,0,nums1[i]+nums2[0]});
     }
     while (k-- && !pq.empty()) {
         node tmp = pq.top();
         pq.pop();
-        res.emplace_back(vector<int>{nums1[tmp.i], nums2[tmp.j]});
+        ret.emplace_back(vector<int>{nums1[tmp.i], nums2[tmp.j]});
         if (tmp.j < n-1) {
             pq.push(node{tmp.i,tmp.j+1,nums1[tmp.i]+nums2[tmp.j+1]});
         }
     }
-    return res;
+    return ret;
 }
 
 // 字节笔试21/4/25 3 easy
@@ -44,15 +44,15 @@ vector<vector<int>> kSmallestPairs(vector<int>& nums1, vector<int>& nums2, int k
 // 贪心+哈夫曼编码，实现方法小顶堆
 // 哈夫曼编码：简单来说就是一堆数，合并的代价是两个节点之和，为了使总代价最小，每次取最小的两个节点合并
 int connectSticks(vector<int>& sticks) {
-	int res = 0;
+	int ret = 0;
 	priority_queue<int, vector<int>, greater<int>> q(sticks.begin(), sticks.end());
 	while (q.size() > 1) {
 		int f1 = q.top(); q.pop();
 		int f2 = q.top(); q.pop();
 		q.push(f1+f2);
-		res += f1+f2;
+		ret += f1+f2;
 	}
-	return res;
+	return ret;
 }
 // 延伸问题：
 // 一块60重的金条，分为10 20 30，每次分割金条的代价就是被分割金条的长度，问分成这样的最小代价
@@ -111,15 +111,15 @@ vector<int> maxSlidingWindow(vector<int>& nums, int k) {
     for (int i = 0; i < k; ++i) {
         pq.emplace(nums[i], i);
     }
-    vector<int> res{pq.top().first};
+    vector<int> ret{pq.top().first};
     for (int i = k; i < nums.size(); ++i) {
         pq.emplace(nums[i], i);
         while (pq.top().second <= i-k) {
             pq.pop();
         }
-        res.emplace_back(pq.top().first);
+        ret.emplace_back(pq.top().first);
     }
-    return res;
+    return ret;
 }
 
 // 347 medium 返回nums其中出现频率前 k 高的元素。
@@ -135,12 +135,12 @@ vector<int> topKFrequent(vector<int>& nums, int k) {
         pq.emplace(cur);
         if (pq.size() > k) pq.pop();
     }
-    vector<int> res(k);
+    vector<int> ret(k);
     for (int i = k-1; i >= 0; --i) {  // 把最小的放末尾
-        res[i] = pq.top().first;
+        ret[i] = pq.top().first;
         pq.pop();
     }
-    return res;
+    return ret;
 }
 // 692 medium int变成string 返回的答案应该按单词出现频率由高到低排序。如果不同的单词有相同出现频率，按字典顺序排序。
 vector<string> topKFrequent(vector<string>& words, int k) {
@@ -154,10 +154,10 @@ vector<string> topKFrequent(vector<string>& words, int k) {
         pq.emplace(cur);
         if (pq.size() > k) pq.pop();
     }
-    vector<string> res(k);
+    vector<string> ret(k);
     for (int i = k-1; i >= 0; --i) {  // 把最小的放末尾
-        res[i] = pq.top().first;
+        ret[i] = pq.top().first;
         pq.pop();
     }
-    return res;
+    return ret;
 }

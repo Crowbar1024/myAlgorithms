@@ -16,16 +16,16 @@ class Solution {
 public:
     vector<vector<int>> subsets(vector<int>& nums) {
         sort(nums.begin(), nums.end());
-        vector<vector<int>> res;
+        vector<vector<int>> ret;
         vector<int> snap;
-        dfs(nums, 0, res, snap);
-        return res;
+        dfs(nums, 0, ret, snap);
+        return ret;
     }
-    void dfs(vector<int>& nums, int pos, vector<vector<int>>& res, vector<int>& snap) {
-        res.push_back(snap);
+    void dfs(vector<int>& nums, int pos, vector<vector<int>>& ret, vector<int>& snap) {
+        ret.push_back(snap);
         for (int i = pos; i < nums.size(); i++) {
             snap.push_back(nums[i]);
-            dfs(nums, i+1, res, snap);
+            dfs(nums, i+1, ret, snap);
             snap.pop_back();
         }
     }
@@ -34,17 +34,17 @@ public:
 // 77 medium [1:n]中k个数的全部组合 关键：剪枝
 class Solution {
 public:
-    vector<vector<int>> res;
+    vector<vector<int>> ret;
     vector<int> subset;
     int len, cnt;
     vector<vector<int>> combine(int n, int k) {
         len = n, cnt = k;
         dfs(1);
-        return res;
+        return ret;
     }
     void dfs(int pos) {
         if (subset.size() == cnt) {
-            res.emplace_back(subset);
+            ret.emplace_back(subset);
             return;
         }
         // 一共需要cnt个数，而subset.size()是前面路径的长度，for循环长度是兄弟节点的个数，是需要被限制的
@@ -64,17 +64,17 @@ class Solution {
 public:
     vector<vector<int>> subsetsWithDup(vector<int>& nums) {
         sort(nums.begin(), nums.end());
-        vector<vector<int>> res;
+        vector<vector<int>> ret;
         vector<int> snap;
-        dfs(nums, 0, res, snap);
-        return res;
+        dfs(nums, 0, ret, snap);
+        return ret;
     }
-    void dfs(vector<int>& nums, int pos, vector<vector<int>>& res, vector<int>& snap) {
-        res.push_back(snap);
+    void dfs(vector<int>& nums, int pos, vector<vector<int>>& ret, vector<int>& snap) {
+        ret.push_back(snap);
         for (int i = pos; i < nums.size(); i++) {
             if (i > pos && nums[i] == nums[i-1]) continue;
             snap.push_back(nums[i]);
-            dfs(nums, i+1, res, snap);
+            dfs(nums, i+1, ret, snap);
             snap.pop_back();
         }
     }
@@ -85,21 +85,21 @@ public:
 class Solution {
 public:
     vector<vector<int>> combinationSum3(int k, int n) {
-        vector<vector<int>> res;
+        vector<vector<int>> ret;
         vector<int> subset;
-        dfs(n, k, 1, res, subset, 0);
-        return res;
+        dfs(n, k, 1, ret, subset, 0);
+        return ret;
     }
-    void dfs(int n, int k, int pos, vector<vector<int>>& res, vector<int>& subset, int sum) {
+    void dfs(int n, int k, int pos, vector<vector<int>>& ret, vector<int>& subset, int sum) {
         if (sum > n) return;
         if (subset.size() == k) {
-            if (sum == n) res.emplace_back(subset);
+            if (sum == n) ret.emplace_back(subset);
             return;
         }
         for (int i = pos; i <= 10-k+subset.size(); ++i) {
             sum += i;
             subset.emplace_back(i);
-            dfs(n, k, i+1, res, subset, sum);
+            dfs(n, k, i+1, ret, subset, sum);
             sum -= i;
             subset.pop_back();
         }
@@ -110,18 +110,18 @@ public:
 // 因为数字可以重复，所以dfs时不用进入下一层，依然进入这一层
 class Solution {
 public:
-    vector<vector<int>> res;
+    vector<vector<int>> ret;
     vector<int> subset;
     int sum = 0;
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        if (candidates.empty()) return res;
+        if (candidates.empty()) return ret;
         sort(candidates.begin(), candidates.end());
         dfs(candidates, target, 0);
-        return res;
+        return ret;
     }
     void dfs(vector<int>& candidates, int target, int pos) {
         if (sum == target) {
-            res.emplace_back(subset);
+            ret.emplace_back(subset);
             return;
         }
         for (int i = pos; i < candidates.size(); ++i) {
@@ -139,19 +139,19 @@ public:
 // 40 medium 数字选择不再重复，但结果不能重复，比如[1,2,2]凑3不能有两个{1,2}
 class Solution {
 public:
-    vector<vector<int>> res;
+    vector<vector<int>> ret;
     vector<int> subset;
     int sum = 0;
     vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
-        if (candidates.empty()) return res;
+        if (candidates.empty()) return ret;
         sort(candidates.begin(), candidates.end());
         dfs(candidates, target, 0);
-        return res;
+        return ret;
     }
     void dfs(vector<int>& candidates, int target, int pos) {
         if (sum > target) return;
         if (sum == target) {
-            res.emplace_back(subset);
+            ret.emplace_back(subset);
             return;
         }
         for (int i = pos; i < candidates.size(); ++i) {
@@ -177,13 +177,13 @@ public:
 class Solution {
 public:
     vector<vector<int>> findSubsequences(vector<int>& nums) {
-        vector<vector<int>> res;
+        vector<vector<int>> ret;
         vector<int> snap;
-        dfs(0, nums, snap, res);
-        return res;
+        dfs(0, nums, snap, ret);
+        return ret;
     }
-    void dfs(int pos, vector<int>& nums, vector<int> &snap, vector<vector<int>> &res) {
-        if (snap.size() >= 2) res.emplace_back(snap);
+    void dfs(int pos, vector<int>& nums, vector<int> &snap, vector<vector<int>> &ret) {
+        if (snap.size() >= 2) ret.emplace_back(snap);
         if (pos == nums.size()) return;
         unordered_set<int> myset;
         for (int i = pos; i < nums.size(); ++i) {
@@ -191,7 +191,7 @@ public:
             if (i > pos && myset.count(nums[i]) == 1) continue;  // 避免重复
             snap.emplace_back(nums[i]);
             myset.insert(nums[i]);
-            dfs(i+1, nums, snap, res);
+            dfs(i+1, nums, snap, ret);
             snap.pop_back();
         }
     }

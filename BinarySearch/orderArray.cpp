@@ -50,28 +50,28 @@ int searchInsert(vector<int>& nums, int target) {
 // easy 1385 找到满足对于arr1[i] ，不存在任何元素 arr2[j] 满足 |arr1[i]-arr2[j]| <= d 的arr1元素个数
 // 其实就是检测arr2中第一个大于x的，和最后一个小于x的
 int findTheDistanceValue(vector<int>& arr1, vector<int>& arr2, int d) {
-    int res = 0, n = arr2.size();
+    int ret = 0, n = arr2.size();
     sort(arr2.begin(), arr2.end());
     for (int &x : arr1) {
         int pos = lower_bound(arr2.begin(), arr2.end(), x) - arr2.begin();
         bool flag = true;
         if (pos < n) flag &= (arr2[pos]-x > d);  // =类的优先级向来很低
         if (pos > 0) flag &= (x-arr2[pos-1] > d);
-        if (flag) res += 1;
+        if (flag) ret += 1;
     }
-    return res;
+    return ret;
 }
 
 // medium 34 非降序序列，找到target的第一个和最后一个
 // 一开始想一次二分，发现很困难
 vector<int> searchRange(vector<int>& nums, int target) {
-    vector<int> res{-1, -1};
+    vector<int> ret{-1, -1};
     auto itl = lower_bound(nums.begin(), nums.end(), target);
     auto itr = upper_bound(itl, nums.end(), target);
-    if (nums.empty() || itl == nums.end() || itl == itr) return res;
-    res[0] = itl - nums.begin();
-    res[1] = itr - nums.begin() - 1;
-    return res;
+    if (nums.empty() || itl == nums.end() || itl == itr) return ret;
+    ret[0] = itl - nums.begin();
+    ret[1] = itr - nums.begin() - 1;
+    return ret;
 }
 
 

@@ -58,19 +58,19 @@ int minCostConnectPoints(vector<vector<int>>& points) {
         }
     }
     UFS ufs(n); // 利用并查集检测顶点是否之间被访问过，默认序号小的为头
-    int res = 0;
+    int ret = 0;
     while (!pq.empty()) {
         int curLen = pq.top().len, curx = pq.top().x, cury = pq.top().y; // 获得当前最短的边
         pq.pop();
         int rootx = ufs.find(curx);
         int rooty = ufs.find(cury);
         if (rootx != rooty) {  // 边是新边，需要加入当前的最小生成树
-            res += curLen;
+            ret += curLen;
             ufs.unit(rootx, rooty);
             if (ufs.cnt[rootx] == -n) break; // 集合已经包含了n个节点
         }
     }
-    return res;
+    return ret;
 }
 // Prims解法
 // 1 随机挑一个初始点当做初始点集合A
@@ -87,7 +87,7 @@ int minCostConnectPoints(vector<vector<int>>& points) {
 int minCostConnectPoints(vector<vector<int>>& points) {
     int n = points.size();
     priority_queue<pair<int,int>> pq;
-    int res = 0;
+    int ret = 0;
     int v = 0;  // initial point
     vector<bool> isVisited(n);
     for (int i = 1; i < n; ++i) {
@@ -99,18 +99,18 @@ int minCostConnectPoints(vector<vector<int>>& points) {
             }
         }
         while (isVisited[pq.top().second]) pq.pop();
-        res -= pq.top().first;
+        ret -= pq.top().first;
         v = pq.top().second;
         pq.pop();
     }
-    return res;
+    return ret;
 }
 // 这种解法运用到了堆，因为会把所有边都统计，所以时间复杂度为n^2 * 2logn，前者为边数，后者为堆的运算一次的复杂度
 // 由于会计算到全部边，所以改进的方法是用一个n维的数组去统计最短距离
 // minDist[j]是当前节点j到点集A的最短距离
 int minCostConnectPoints(vector<vector<int>>& points) {
     int n = points.size();
-    int res = 0;
+    int ret = 0;
     vector<int> minDist(n, INT_MAX);
     int v = 0;  // initial point
     for (int i = 1; i < n; ++i) {
@@ -123,10 +123,10 @@ int minCostConnectPoints(vector<vector<int>>& points) {
                 adjCur = minDist[j] < minDist[adjCur] ? j : adjCur;  // 更新出所有点中与当前节点最近的那个
             }
         }
-        res += minDist[adjCur];
+        ret += minDist[adjCur];
         v = adjCur;
     }
-    return res;
+    return ret;
 }
 
 

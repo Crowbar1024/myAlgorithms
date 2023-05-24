@@ -97,12 +97,12 @@ vector<int> reverseRange(vector<int> a, vector<vector<int>> ranges) {
         df[l] ^= 1;
         df[r+1] ^= 1;
     }
-    vector<int> res(n, 0);
-    res[0] = df[0];
+    vector<int> ret(n, 0);
+    ret[0] = df[0];
     for (int i=1; i<n; ++i) {
-        res[i] = df[i]^res[i-1];
+        ret[i] = df[i]^ret[i-1];
     }
-    return res;
+    return ret;
 }
 
 
@@ -118,11 +118,11 @@ int maximumPopulation(vector<vector<int>>& logs) {
         df[l] += 1;
         df[r] -= 1;
     }
-    int res = 0, snap = 0, pos = 0;
+    int ret = 0, snap = 0, pos = 0;
     for (int i = 0; i < df.size(); ++i) {
         snap += df[i];
-        if (snap > res) {
-            res = snap;
+        if (snap > ret) {
+            ret = snap;
             pos = i;
         }
     }

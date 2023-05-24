@@ -42,12 +42,12 @@ int dfs(int pos, int sum, bool limit) {
 	if (sum > thd) return 0;
 	if (!limit && dp[pos][thd-sum] != -1) return dp[pos][thd-sum];
 	int up = limit ? a[pos] : 9;
-	int res = 0;
+	int ret = 0;
 	for (int i=0; i<=up; i++) {
-		res += dfs(pos-1, sum+i*(1<<pos), limit&&i==a[pos]);
+		ret += dfs(pos-1, sum+i*(1<<pos), limit&&i==a[pos]);
 	}
-	if (!limit) dp[pos][thd-sum] = res;
-	return res;
+	if (!limit) dp[pos][thd-sum] = ret;
+	return ret;
 }
 
 int solve(int x) {

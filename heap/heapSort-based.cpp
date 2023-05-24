@@ -12,10 +12,10 @@ private:
     vector<int> tr; // 内存数组，前半部分[0:m-1]为完全二叉树，默认小顶堆，后半部分[m,n-1]为remain数组，存放更小的值
     int n; // 内存大小
     int m; // 堆的大小
-    vector<vector<int>> res; // 最终生产的顺串，每个长度可能不同
+    vector<vector<int>> ret; // 最终生产的顺串，每个长度可能不同
     void init(vector<int>& bigFile, int n) {
         tr.clear();
-        res.clear();
+        ret.clear();
         this->n = n;
         this->m = n;
         tr.resize(n);
@@ -29,7 +29,7 @@ private:
                 m = n; // 把remain部分的建堆
                 build();
             }
-            res[id].emplace_back(tr[0]);
+            ret[id].emplace_back(tr[0]);
             if (val > tr[0]) { // 大的就放入堆
                 tr[0] = val;
                 swap(tr[0], tr[m-1]);
@@ -59,7 +59,7 @@ private:
 public:
     vector<vector<int>> getSmallFiles(vector<int>& bigFile, int n) {
         init(bigFile, n);
-        return res;
+        return ret;
     }
 };
 

@@ -36,42 +36,42 @@ int integerBreak(int n) {
     if (n == 3) return 2;
     int n2 = n % 3;
     int n3 = n / 3;
-    int res;
+    int ret;
     if (n2 == 0) {  // 6 9 12
-        res = (int) pow(3, n3);
+        ret = (int) pow(3, n3);
     } else if (n2 == 1) {  // 7 10 13
-        res = 4 * (int) pow(3, n3-1);
+        ret = 4 * (int) pow(3, n3-1);
     } else {  // 5 8 11
-        res = 2 * (int) pow(3, n3);
+        ret = 2 * (int) pow(3, n3);
     }
-    return res;
+    return ret;
 }
 
 // 进阶版，由于答案过大，请对 998244353 取模。
 // 快速幂
 long long myPow(long long m) {
-    long long res = 1, x = 3;
+    long long ret = 1, x = 3;
     while (m) {
-        if (m & 1) res = (res*x)%998244353;
+        if (m & 1) ret = (ret*x)%998244353;
         x = (x*x)%998244353;
         m >>= 1;
     }
-    return res;
+    return ret;
 }
 long long cutRope(long long number) {
     if (number == 2) return 1;
     if (number == 3) return 2;
     long long n2 = number % 3;
     long long n3 = number / 3;
-    long long res;
+    long long ret;
     if (n2 == 0) {
-        res = myPow(n3);
+        ret = myPow(n3);
     } else if (n2 == 1) {
-        res = 4 * myPow(n3-1);
+        ret = 4 * myPow(n3-1);
     } else {
-        res = 2 * myPow(n3);
+        ret = 2 * myPow(n3);
     }
-    return res%998244353;
+    return ret%998244353;
 }
 
 

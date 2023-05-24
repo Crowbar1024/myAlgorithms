@@ -9,15 +9,15 @@
 
 // 547 medium 给了一个 n*n 的邻接矩阵，求图中连通图的数量
 int findCircleNum_DFS(vector<vector<int>>& isConnected) {
-    int n = isConnected.size(), res = 0;
+    int n = isConnected.size(), ret = 0;
     vector<bool> isVisit(n, false);
     for (int i = 0; i < n; ++i) {   
         if (!isVisit[i]) { // 不用遍历j，反正dfs的for会遍历。也不用初始化，因为一定会遍历到isConnected[i][j]自己
             dfs(isConnected, isVisit, n, i);
-            ++res;
+            ++ret;
         }
     }
-    return res;
+    return ret;
 }
 void dfs(vector<vector<int>>& isConnected, vector<bool>& isVisit, int n, int i) {
     for (int j = 0; j < n; ++j) {

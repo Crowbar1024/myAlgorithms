@@ -32,18 +32,18 @@ int uniquePaths(int m, int n) {
 // 返回所有小于非负整数 n 的质数的数量
 // 注意：从 i*i 开始标记，比如5，5*2 5*3 5*4都已经标记过了
 int countPrimes(int n) {
-    int res = 0;
+    int ret = 0;
     vector<bool> isPrime(n, true);
     for (int i = 2; i < n; ++i) {
         if (isPrime[i]) {
-            res += 1;
+            ret += 1;
             if ((long long) i*i >= n) continue;
             for (int j = i*i; j < n; j += i) {
                 isPrime[j] = false;
             }
         }
     }
-    return res;
+    return ret;
 }
 
 // NC132/139 约瑟夫环
@@ -120,13 +120,13 @@ bool isRayIntersectsSegment(pair<double,double> x, vector<edge>& e, int i) {
 // 我认为平均复杂度符合题意，哈哈哈哈哈，官方题解却没有这个思路！
 // 后来学了摩尔投票法，即相同的+1，不同的-1，为0换新的。
 int majorityElement(vector<int>& nums) {
-    int res = nums[0], cnt = 1;
+    int ret = nums[0], cnt = 1;
     for (int i = 1; i < nums.size(); ++i) {
-        if (cnt == 0) res = nums[i];
-        if (nums[i] != res) --cnt;
+        if (cnt == 0) ret = nums[i];
+        if (nums[i] != ret) --cnt;
         else ++cnt;
     }
-    return res;
+    return ret;
 }    
 // 229 medium(hard) 找出现次数大于int(n/3)的元素
 vector<int> majorityElement(vector<int>& nums) {
@@ -153,10 +153,10 @@ vector<int> majorityElement(vector<int>& nums) {
         if (vote1>0 && num==element1) cnt1++;
         if (vote2>0 && num==element2) cnt2++;
     }
-    vector<int> res;
-    if (vote1>0 && cnt1>nums.size()/3) res.emplace_back(element1);
-    if (vote2>0 && cnt2>nums.size()/3) res.emplace_back(element2);
-    return res;
+    vector<int> ret;
+    if (vote1>0 && cnt1>nums.size()/3) ret.emplace_back(element1);
+    if (vote2>0 && cnt2>nums.size()/3) ret.emplace_back(element2);
+    return ret;
 }
 
 
@@ -172,11 +172,11 @@ public:
         return this->nums;
     }
     vector<int> shuffle() {
-        vector<int> res = nums;
+        vector<int> ret = nums;
         for (int i = nums.size()-1; i >= 0; --i) {
             int idx = rand()%(i+1);
-            swap(res[i], res[idx]);
+            swap(ret[i], ret[idx]);
         }
-        return res;
+        return ret;
     }
 };

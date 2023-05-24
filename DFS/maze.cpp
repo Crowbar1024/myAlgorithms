@@ -54,13 +54,13 @@ class Solution {
 public:
     int row, col;
     vector<vector<int>> maze, preDir; // 记录方向
-    vector<pair<int,int>> res;
+    vector<pair<int,int>> ret;
     int main() {
         // freopen("input.txt","r",stdin);
         while (cin >> row >> col) {
             maze = vector<vector<int>>(row, vector<int>(col, 0));
             preDir = vector<vector<int>>(row, vector<int>(col, 0));
-            res.clear();
+            ret.clear();
             for (int i = 0; i < row; ++i) {
                 for (int j = 0; j < col; ++j) {
                     cin >> maze[i][j];
@@ -85,14 +85,14 @@ public:
             }
             int x = row-1, y= col-1;
             while (preDir[x][y] != -1) {
-                res.emplace_back(x,y);
+                ret.emplace_back(x,y);
                 int i = (preDir[x][y]+2)%4;  // 反方向，走回去
                 x += dir[i];
                 y += dir[i+1];
             }
-            res.emplace_back(0,0);
-            for (int i = res.size()-1; i >= 0; --i) {
-                printf("(%d,%d)\n", res[i].first, res[i].second);
+            ret.emplace_back(0,0);
+            for (int i = ret.size()-1; i >= 0; --i) {
+                printf("(%d,%d)\n", ret[i].first, ret[i].second);
             }
         }
         return 0;
@@ -108,13 +108,13 @@ public:
     int longestIncreasingPath(vector<vector<int>>& matrix) {
         m = matrix.size(), n = matrix[0].size();
         vector<vector<int>> dist(m, vector<int>(n, 0));  // 默认为0，这样如果为1，说明该店周围都大于等于它
-        int res = 1;
+        int ret = 1;
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
-                res = max(res, dfs(matrix, dist, i, j));
+                ret = max(ret, dfs(matrix, dist, i, j));
             }
         }
-        return res;
+        return ret;
     }
     int dfs(vector<vector<int>>& matrix, vector<vector<int>>& dist, int x, int y) {
         if (dist[x][y] > 0) return dist[x][y]; // 体现了初始化为0的价值

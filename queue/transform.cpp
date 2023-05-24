@@ -9,9 +9,9 @@ public:
     MyQueue() {}
     void push(int x) { input.push(x); }
     int pop() {
-        int res = peek();
+        int ret = peek();
         output.pop();
-        return res;
+        return ret;
     }
     int peek() {
         if (output.empty()) {

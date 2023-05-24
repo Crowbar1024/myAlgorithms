@@ -152,11 +152,11 @@ bool MyList::isPalindrome() {
     // 翻转后。举个例子，会变成1->2->3->4<-5，或者1->2->3<-4这种形式（4/3的next是nullptr）
     // 所以前一个节点是一直指向原来的4/3，所以不需要做调整
     ListNode *record = slowPtr;    // 根据之前的代码注释，此时slowPtr是新的下半部分链表的head（上面例子的5/4），保存用于最后的恢复操作
-    bool res = true;
+    bool ret = true;
     // 开始判断是否回文
     while (slowPtr) {
         if (slowPtr->val != cur->val) {
-            res = false;
+            ret = false;
             break;
         }
         slowPtr = slowPtr->next;
@@ -170,5 +170,5 @@ bool MyList::isPalindrome() {
         record = p2;
         p2 = p1->next;
     }
-    return res;
+    return ret;
 }

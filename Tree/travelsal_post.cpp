@@ -44,19 +44,19 @@ vector<int> postorderTraversal(TreeNode* root) {
 // 后序遍历，层序遍历都行
 int maxDepth(TreeNode* root) {
     if (!root) return 0;
-    int res = max(maxDepth(root->left), maxDepth(root->right)) + 1;
-    return res;
+    int ret = max(maxDepth(root->left), maxDepth(root->right)) + 1;
+    return ret;
 }
 // 看了下递归的形式，就是后序遍历
 int maxDepth(TreeNode* root) {
     if (!root) return 0;
     stack<TreeNode*> s;
     TreeNode *cur = root, *last = nullptr;
-    int res = 0;
+    int ret = 0;
     while (true) {
         while (cur) {
             s.push(cur);
-            res = max(res, (int)s.size());
+            ret = max(ret, (int)s.size());
             cur = cur->left;
         }
         if (s.empty()) break;
@@ -68,7 +68,7 @@ int maxDepth(TreeNode* root) {
             cur = nullptr;    
         }
     }
-    return res;
+    return ret;
 }
 
 
@@ -113,11 +113,11 @@ vector<vector<int>> pathSum(TreeNode* root, int sum) {
     if (!root) return v;
     stack<TreeNode*> s;
     TreeNode *cur = root, *last = nullptr;
-    int res = 0;
+    int ret = 0;
     vector<int> path;
     while (true) {
         while (cur) {
-            res += cur->val;
+            ret += cur->val;
             path.push_back(cur->val);
             s.push(cur);
             cur = cur->left;
@@ -126,11 +126,11 @@ vector<vector<int>> pathSum(TreeNode* root, int sum) {
         cur = s.top();
         if (cur->right && cur->right != last) cur = cur->right;
         else {
-            if (!cur->left && !cur->right && res == sum) {
+            if (!cur->left && !cur->right && ret == sum) {
                 v.push_back(path);
                 // 注意此时不能continue，因为要弹出当前节点
             }
-            res -= cur->val;
+            ret -= cur->val;
             path.pop_back();  // 注意也要从path弹出
             s.pop();
             last = cur;

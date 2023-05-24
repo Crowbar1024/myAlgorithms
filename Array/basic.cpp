@@ -77,15 +77,15 @@ int leastBricks(vector<vector<int>>& wall) {
     int width = accumulate(wall[0].begin(), wall[0].end(), 0);
     if (width == 1) return rowNum;
     unordered_map<int, int> edge;
-    int res = rowNum;
+    int ret = rowNum;
     for (auto row : wall) {
         for (int i = 0, curWid = 0; i < row.size()-1; ++i) {  // 注意裂缝数为线条数-1
             curWid += row[i];
             ++edge[curWid];
-            res = min(res, rowNum - edge[curWid]);
+            ret = min(ret, rowNum - edge[curWid]);
         }
     }
-    return res;
+    return ret;
 }
 
 
@@ -111,20 +111,20 @@ int hardestWorker(int n, vector<vector<int>>& logs) {
 // 先排序，分情况，若是k大于负数的个数，全部用于翻转最小的正数；否则直接用完
 int largestSumAfterKNegations(vector<int>& nums, int k) {
     sort(nums.begin(), nums.end(), [](const int &x, const int &y) { return abs(x) > abs(y); });
-    int res = 0;
+    int ret = 0;
     for (int i = 0; i < nums.size(); ++i) {
         if (k > 0 && nums[i] < 0) {
-            res += -nums[i];
+            ret += -nums[i];
             --k;
-        } else res += nums[i];
+        } else ret += nums[i];
     }
     // 如果k不剩，这说明把负的都变正了
     // 如果k还剩，是奇数的话，如果绝对值最小的数是正数，那么让其变负，前面加了，这里减两次
     // 如果k还剩，是奇数的话，如果绝对值最小的数是负数，前面用了，那么就是偶数，所以依然还是加负数，前面减了负数，这里加两次负数
     // 如果k还剩，是偶数的话，如果绝对值最小的数是正数，偶数操作不变
     // 如果k还剩，是偶数的话，如果绝对值最小的数是负数，前面用了，那么就是奇数，所以依然还是减负数，前面减了负数，这里不变
-    if (k & 1) res -= 2*abs(nums.back());
-    return res;
+    if (k & 1) ret -= 2*abs(nums.back());
+    return ret;
 }
 
 // 738 medium 给定一个非负整数 N，找出小于或等于 N 的最大的整数，同时这个整数需要满足其各个位数上的数字是不严格单调递增。

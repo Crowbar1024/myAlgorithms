@@ -4,24 +4,24 @@
 // 如果你不能获取任何利润，返回0 
 // 怎么贪，最大利润，肯定首先要选最小的天。然后动态统计结果。
 int maxProfit(vector<int>& prices) {
-    int minprice = INT_MAX, res = 0;
+    int minprice = INT_MAX, ret = 0;
     for (int i = 0; i < prices.size(); ++i) {
         minprice = min(minprice, prices[i]);
-        res = max(res, prices[i]-minprice);
+        ret = max(ret, prices[i]-minprice);
     }
-    return res;
+    return ret;
 }
 
 // 122 medium 股票价格，每天只能买/卖一支股票，无限次交易，计算最大利润
 // 记录上升部分就行
 int maxProfit(vector<int>& prices) {
-    int res = 0;
+    int ret = 0;
     for (int i = 1; i < prices.size(); ++i) {
         if (prices[i] > prices[i-1]) {
-            res += prices[i] - prices[i-1];
+            ret += prices[i] - prices[i-1];
         }
     }
-    return res;
+    return ret;
 }
 
 // 123 hard 最多可以完成两笔交易（可以一次）。不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
@@ -60,11 +60,11 @@ int maxProfit(int k, vector<int>& prices) {
 // 714 medium 买卖一次交易需要手续费，可以无限次交易
 // 贪心策略：每次能赚钱就买，然后更新下一次买的价格，但为了避免多交手续费，下一次价格要减去手续费
 int maxProfit(vector<int>& prices, int fee) {
-    int res = 0;
+    int ret = 0;
     int l = prices[0];
     for (int i = 1; i < prices.size(); ++i) {
         if (prices[i] > l+fee) {  // 可以买，但为了节省手续费，期望后面遇到更大的
-            res += prices[i]-l-fee;  // 先买了
+            ret += prices[i]-l-fee;  // 先买了
             l = prices[i]-fee;  // 遇到更大的，为了避免多交手续费
         } else if (prices[i] >= l && prices[i] <= l+fee) {  // 不卖，不够大到支付上一次的手续费
             continue;
@@ -72,7 +72,7 @@ int maxProfit(vector<int>& prices, int fee) {
             l = prices[i];
         }
     }
-    return res;
+    return ret;
 }
 
 // 309 medium 卖完的冷冻期为1天，第二天不能买 DP

@@ -23,7 +23,7 @@ vector<int> maxSlidingWindow(vector<int>& nums, int k) {
         }
         dq.emplace_back(i);
     }
-    vector<int> res{nums[dq.front()]};
+    vector<int> ret{nums[dq.front()]};
     for (int i = k; i < nums.size(); ++i) {
         while (!dq.empty() && nums[i] >= nums[dq.back()]) {
             dq.pop_back();
@@ -32,8 +32,8 @@ vector<int> maxSlidingWindow(vector<int>& nums, int k) {
         if (dq.front() <= i-k) {
             dq.pop_front();
         }
-        res.emplace_back(nums[dq.front()]);
+        ret.emplace_back(nums[dq.front()]);
     }
-    return res;
+    return ret;
 }
 

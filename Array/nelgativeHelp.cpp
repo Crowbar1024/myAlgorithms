@@ -38,25 +38,25 @@ vector<int> findDisappearedNumbers(vector<int>& nums) {
         int x = abs(nums[i])-1;  // 由于出现过一次的数会置符，所以要加绝对值
         nums[x] = nums[x] > 0 ? -nums[x] : nums[x];   
     }
-    vector<int> res;
+    vector<int> ret;
     for(int i = 0; i < nums.size(); i++)
-        if(nums[i] > 0) res.push_back(i+1);
-    return res;
+        if(nums[i] > 0) ret.push_back(i+1);
+    return ret;
 }
 
 // 442 medium 大小为n的数组的所有整数都在范围 [1,n] 内，且每个整数出现一次或两次。请你找出所有出现两次的整数
 // 如果按照448的思路，为正表示从没在 [1,n] 中出现的数，第二次为负表示出现两次
 vector<int> findDuplicates(vector<int>& nums) {
-    vector<int> res;
+    vector<int> ret;
     for (int i = 0; i < nums.size(); i++) {
         int x = abs(nums[i])-1;
         if (nums[x] > 0) {
             nums[x] = -nums[x];
         } else {
-            res.emplace_back(x+1);
+            ret.emplace_back(x+1);
         }
     }
-    return res;
+    return ret;
 }
 
 

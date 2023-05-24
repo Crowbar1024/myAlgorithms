@@ -14,14 +14,14 @@ int lengthOfLastWord(string s) {
 // 如果反转后整数超过 32 位的有符号整数的范围，就返回0。
 // 假设环境不允许存储 64 位整数（有符号或无符号）。
 int reverse(int x) {
-    int res = 0;
+    int ret = 0;
     while (x) {
-        if (res<INT_MIN/10 || res>INT_MAX/10) return 0;  // 下一次要变大/小，先判断
+        if (ret<INT_MIN/10 || ret>INT_MAX/10) return 0;  // 下一次要变大/小，先判断
         int tail = x%10;  // 这里需要-89%10=9，所以正常的就行
-        res = res*10+tail;
+        ret = ret*10+tail;
         x /= 10;
     }
-    return res;
+    return ret;
 }
 
 // 8 medium 将字符串转换成一个 32 位有符号整数
@@ -32,7 +32,7 @@ int reverse(int x) {
 // 如果整数数超过 32 位有符号整数，返回最近的边界值
 // 有个特殊情况：+-12 返回0; 00000-54a 返回0； "   +0 123" 返回0
 int myAtoi(string s) {
-    int res = 0;
+    int ret = 0;
     int sign = 1;
     bool flag = false;  // 判断只有一个正负号
     for (char ch : s) {
@@ -44,12 +44,12 @@ int myAtoi(string s) {
         else if (isdigit(ch)) {
             flag = true;
             int num = ch-'0';
-            if (res<INT_MIN/10 || (res==INT_MIN/10 && -num<=INT_MIN%10)) return INT_MIN;
-            else if (res>INT_MAX/10 || (res==INT_MAX/10 && num>=INT_MAX%10)) return INT_MAX;
-            res = res*10+sign*num;
+            if (ret<INT_MIN/10 || (ret==INT_MIN/10 && -num<=INT_MIN%10)) return INT_MIN;
+            else if (ret>INT_MAX/10 || (ret==INT_MAX/10 && num>=INT_MAX%10)) return INT_MAX;
+            ret = ret*10+sign*num;
         } else break;
     }
-    return res;
+    return ret;
 }
 
 // 9 easy 32位有符号整数是否回文 不能用字符串
@@ -109,18 +109,18 @@ int romanToInt(string s) {
         {'V', 5},
         {'I', 1},
     };
-    int res = 0, cur = 1; // cur为当前的最大的位
+    int ret = 0, cur = 1; // cur为当前的最大的位
     // "LVIII" -- 50 + 5 + 3
     for (int i = s.size()-1; i >= 0; --i) {
         int val = tb[s[i]];
         if (val >= cur) {
-            res += val;
+            ret += val;
             cur = val;
         } else {
-            res -= val;
+            ret -= val;
         }
     }
-    return res;
+    return ret;
 }
 // 273 hard 整数转英文
 const vector<string> singles = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"};
@@ -129,31 +129,31 @@ const vector<string> tens = {"", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "S
 const vector<string> thousands = {"", "Thousand", "Million", "Billion"};
 string numberToWords(int num) {
     if (!num) return "Zero";
-    string res = "";
+    string ret = "";
     for (int base = 1e9, i = 3; i >= 0; base /= 1e3, --i) { // 分成4段
         int snap = num/base;
         if (snap) {
-            res += numberToWordsHelp(snap) + thousands[i] + " ";
+            ret += numberToWordsHelp(snap) + thousands[i] + " ";
             num -= snap*base;
         }
     }
-    while (res.back() == ' ') res.pop_back();
-    return res;
+    while (ret.back() == ' ') ret.pop_back();
+    return ret;
 }
 string numberToWordsHelp(int num) { // 3位数转换
-    string res = "";
+    string ret = "";
     if (num >= 100) {
-        res += singles[num/100] + " Hundred ";
+        ret += singles[num/100] + " Hundred ";
         num %= 100;
     }
     if (num >= 20) {
-        res += tens[num/10] + " ";
+        ret += tens[num/10] + " ";
         num %= 10;
     }
     if (num >= 10) {
-        res += teens[num-10] + " ";
+        ret += teens[num-10] + " ";
     } else if (num > 0) { // 50 只要输出 fifty
-        res += singles[num] + " ";
+        ret += singles[num] + " ";
     }
-    return res;
+    return ret;
 }
