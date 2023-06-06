@@ -6,15 +6,19 @@
 // dp对象：前i种物品可以选择，放入背包容量为j时所能获得的最大价值
 // 由于无限，而dp[i][j]=max(dp[i-1][j],dp[i-1][j-K*c[i]])的后者就需要先得到
 
-
+// 组合数
+// dp[i][j] 前i种硬币（无限或有限），可以组成数额j的组合数
+// dp[i][j] = sum dp[i-k][j]，后续的凑0，所以是累加
+// 组合数，说明也是恰好装满，emm，似乎不太合适，感觉不像背包了。但dp[0]=1要记住
+// 例子：518
 
 
 
 // 322 easy 给定不同面额的硬币（无限）和一个总金额，计算可以凑成总金额所需的最少的硬币个数。
-// dp[i][j] 前i种物品恰好装满体积为j的背包时的最小重量
+// dp[i][j] 前i种硬币组成金额j的最小个数，恰好装满类型
 // 由于是min，所以初始化不能无穷小，得是无穷大，还得防止溢出
 int coinChange(vector<int>& coins, int amount) {
-    vector<int> dp(amount+1, 0x3f3f3f3f);  // 恰好装满类型
+    vector<int> dp(amount+1, 0x3f3f3f3f); // 恰好装满类型。0个硬币凑一个金额，不存在，最小，所以是正无穷
     dp[0] = 0;
     for (int i = 0; i < coins.size(); i++) {
         for (int j = coins[i]; j <= amount; j++) {
@@ -23,7 +27,24 @@ int coinChange(vector<int>& coins, int amount) {
     }
     return dp[amount] == 0x3f3f3f3f ? -1 : dp[amount];
 }
-
+// 377 medium 给定一个由正整数组成且不存在重复数字的数组nums，找出和为给定目标正整数的排列的个数。
+// 和518一致，但这里是排列，不是组合，所以数量更多。
+// 无法像518这样定义dp，因为dp[i-1][j-k*nums[i]]还需要累加上k个nums[i]的排列数
+// 转换一下，dp[i]表示和为i的的排列数
+// 假设该排列的最后一个元素是 num，则一定有 num <= i，
+// 对于元素之和等于 i−num 的每一种排列，在最后添加 num 之后即可得到一个元素之和等于 i 的排列，
+// 因此在计算 dp[i] 时，应该计算所有的 dp[i−num] 之和。
+int combinationSum4(vector<int>& nums, int target) {
+    vector<int> dp(target+1, 0);
+    dp[0] = 1;
+    for (int i = 1; i <= target; ++i) {
+        for (int j = 0; j < nums.size(); ++j) {
+            // C++测试用例有两个数相加超过int的数据
+            if (nums[j] <= i && dp[i] < INT_MAX-dp[i-nums[j]]) dp[i] += dp[i-nums[j]];
+        }
+    }
+    return dp[target];
+}
 
 // 518 easy 给定不同面额的硬币（无限）和一个总金额，计算可以组成这个数额的组合数
 // dp[i][j] 前i种硬币，可以组成数额j的组合数

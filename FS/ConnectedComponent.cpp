@@ -27,11 +27,33 @@ void dfs(vector<vector<int>>& isConnected, vector<bool>& isVisit, int n, int i) 
         }
     }
 }
+// BFS
+int findCircleNum(vector<vector<int>>& isConnected) {
+    int n = isConnected.size(), ret = 0;
+    vector<bool> isVisit(n, false);
+    queue<int> q;
+    for (int i = 0; i < n; ++i) {
+        if (isVisit[i]) continue;
+        q.emplace(i);
+        while (!q.empty()) {
+            int cur = q.front(); q.pop();
+            isVisit[cur] = true; // 设置的时间点顺序要注意
+            for (int j = 0; j < n; ++j) {
+                if (!isVisit[j] && isConnected[cur][j]) {
+                    q.emplace(j);
+                }
+            }
+        }
+        ++ret;
+    }
+    return ret;
+}
+
 
 
 // 130 medium 矩阵由若干字符 'X' 和 'O' ，找到所有被 'X' 围绕的区域，并将这些区域里所有的 'O' 用 'X' 填充。
-// 注意边界上的 O 永远不会被 X 填充。
-// 所以这道题需要先从边界开始遍历，将靠近边的变成 A。然后遍历全局，把所有的0变成X，因为此时的O一定被X包围。
+// 注意边界上的 O 永远不会被 X 填充。因为边界之外没有X
+// 所以这道题需要先从边界开始遍历，将靠近边的O的集合变成 A。然后遍历全局，把所有的0变成X，因为此时的O一定被X包围。
 void solve(vector<vector<char>>& board) {
     int m = board.size(), n = board[0].size();
     if (m == 1 || n == 1) return;
@@ -45,7 +67,7 @@ void solve(vector<vector<char>>& board) {
     }
     for (int i = 0; i < m; ++i) {
         for (int j = 0; j < n; ++j) {
-            if (board[i][j] == 'A') board[i][j] = 'O';
+            if (board[i][j] == 'A') board[i][j] = 'O'; // 恢复
             else if (board[i][j] == 'O') board[i][j] = 'X';
         }
     }

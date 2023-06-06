@@ -4,6 +4,7 @@
         "vector": "cpp",
         "algorithm": "cpp",
         "xutility": "cpp",
-        "functional": "cpp"
+        "functional": "cpp",
+        "utility": "cpp"
     }
 }

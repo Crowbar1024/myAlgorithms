@@ -1,7 +1,5 @@
 #include "myheader.h"
 
-
-
 // 200 medium 岛屿数量 给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
 // 岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。
 // BFS
@@ -222,6 +220,60 @@ public:
         return ret;
     }
 };
+
+// 934 meidum 两座岛，都是1，求岛间的最短距离
+// 先要用DFS把一个岛变成2，然后将所有的2加入一个队列，BFS每次取出当前的全部节点，将临近的0变成-1
+// 向外扩散，类似树的层次遍历
+int shortestBridge(vector<vector<int>>& grid) {
+    int m = grid.size(), n = grid[0].size();
+    queue<pair<int,int>> que;
+    int jud = 0;
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (grid[i][j] == 1) {
+                grid[i][j] = 2;
+                que.emplace(i, j);
+                dfs(grid, m, n, i, j, que);
+                jud = 1;
+                break; // 一个连通分量就够了
+            }
+        }
+        if (jud == 1) break;
+    }
+    int ret = 0;
+    while (!que.empty()) {
+        int cnt = que.size();
+        while (cnt--) {
+            auto cur = que.front(); // 这里不能写引用，不然会导致heap-use-after-free
+            // 其实很明显，我之后直接pop了，有些编译器会把cur直接给free掉，所以找不到了
+            que.pop();
+            for (int i = 0; i < 4; ++i) {
+                int nx = cur.first + dir[i], ny = cur.second + dir[i+1];
+                if (nx < 0 || nx >= m || ny < 0 || ny >= n || grid[nx][ny] == 2) {
+                    continue;
+                } else if (grid[nx][ny] == 0) {
+                    grid[nx][ny] = -1;
+                    que.emplace(nx, ny);
+                } else if (grid[nx][ny] == 1) {
+                    return ret;
+                }
+            }
+        }
+        ret += 1; // 一圈完成了
+    }
+    return -1;
+}
+void dfs(vector<vector<int>>& grid, int m, int n, int x, int y, queue<pair<int,int>>& que) {
+    for (int i = 0; i < 4; ++i) {
+        int nx = x + dir[i], ny = y + dir[i+1];
+        if (nx < 0 || nx >= m || ny < 0 || ny >= n) continue;
+        if (grid[nx][ny] == 1) {
+            grid[nx][ny] = 2;
+            que.emplace(nx, ny);
+            dfs(grid, m, n, nx, ny, que);
+        }
+    }
+}
 
 
 

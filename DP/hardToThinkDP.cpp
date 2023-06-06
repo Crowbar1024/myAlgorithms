@@ -39,24 +39,6 @@ int numTrees(int n) {
     return dp[n];
 }
 
-// 377 medium 给定一个由正整数组成且不存在重复数字的数组nums，找出和为给定目标正整数的排列的个数。
-// 和518一致，但这里是排列，不是组合，所以数量更多。
-// 无法像518这样定义dp，因为dp[i-1][j-k*nums[i]]还需要累加上k个nums[i]的排列数
-// 转换一下，dp[i]表示和为i的的排列数
-// 当num<i时，假设其为末尾，那么dp[i] = sum_num dp[i-num]
-int combinationSum4(vector<int>& nums, int target) {
-    vector<int> dp(target+1, 0);
-    dp[0] = 1;
-    for (int i = 1; i <= target; ++i) {
-        for (int j = 0; j < nums.size(); ++j) {
-            // C++测试用例有两个数相加超过int的数据
-            if (nums[j] <= i && dp[i] < INT_MAX-dp[i-nums[j]]) dp[i] += dp[i-nums[j]];
-        }
-    }
-    return dp[target];
-}
-
-
 
 // 887 hard K个蛋，N层楼，已知存在楼层F，满足[0,n]，任何从高于f的楼层落下的鸡蛋都会碎，从f楼层或比它低的楼层落下的鸡蛋都不会破。
 // 每次操作，你可以取一枚没有碎的鸡蛋并把它从楼层x扔下（满足[1,n]）。
