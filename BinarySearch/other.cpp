@@ -84,11 +84,6 @@ int findDuplicate(vector<int>& nums) {
 // 还可以用离散数学去做，他的时间复杂度是On，简单来说就是利用链表去检查环的起点的思想，可见142
 
 
-
-
-
-
-
  
 // 154 hard 数组形式同153，即前进升序数组，分A,B段，A的都比B大，但是元素可以重复。用二分找最小值，
 // 核心思想：不断更新[l,r]的取值范围，可以通过mid和任意一边界进行对比来缩短范围，这里选择r，所nums[r]要取得到
@@ -283,4 +278,35 @@ int getPermutationCount(vector<int>& arr) {
         }
     }
     return cnt;
+}
+
+// 1231 hard 将数组分成K+1份，K保证不会大于等于数组长度，所以每份长度至少为1
+// 选择其中最小的一份是自己的。如何分，让自己的最大？返回这个最大值
+// 二分的对象是自己的那份，因为其上下界很容得到。
+// 然后判断是否可行，这一步比较巧妙，因为有了最小份的大小，如果超过其大小的数量超过K+1，那么必然可行
+int maximizeSweetness(vector<int>& sweetness, int k) {
+    int sum = accumulate(sweetness.begin(), sweetness.end(), 0);
+    if (!k) return sum;
+    int r = sum / k; // 取得到
+    int l = 0;
+    while (l < r) { // 相等直接返回l就行
+        int mid = l + (r - l + 1) / 2; // 避免l不收缩导致的循环
+        if (canSplit(mid, sweetness, k + 1)) { // 能分，说明还能更大
+            l = mid;
+        } else {
+            r = mid - 1;
+        }
+    }
+    return l;
+}
+bool canSplit(int minSum, vector<int>& nums, int n) {
+    int count = 0, tmpSum = 0;
+    for (int num : nums) {
+        tmpSum += num;
+        if (tmpSum >= minSum) {
+            ++count;
+            tmpSum = 0;
+        }
+    }
+    return count >= n;
 }

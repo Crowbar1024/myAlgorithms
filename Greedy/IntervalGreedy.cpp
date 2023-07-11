@@ -34,18 +34,18 @@ vector<vector<int>> merge(vector<vector<int>>& intervals) {
     return ret;
 }
 
-// 57 medium 无重叠（端点不重合）的有序排序的区间列表，插入一个新区间，确保列表中的区间仍然有序且不重叠，可以合并区间
+// 57 medium 无重叠（端点不重合）的有序排序的区间列表，插入一个新区间，可以合并重叠的，返回结果区间列表
 // 难点在于区间合并到最后一个区间时，有多种情况，所以干脆不插入，在不相交时插入重叠后的区间
 vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
     if (intervals.empty()) return vector<vector<int>>{newInterval};
     vector<vector<int>> ret;
-    int l = newInterval[0], r = newInterval[1]; // 很巧妙的处理
+    int l = newInterval[0], r = newInterval[1];
     bool flag = false; // 重叠后，在下一个不相交插入之前插入重叠的区间
     for (const vector<int>& line : intervals) {
         if (line[1] < l) { // 当前线段在新区见的左侧不相交
             ret.emplace_back(line);
         } else if (line[0] > r) { // 当前线段在新区见的右侧不相交
-            if (!flag) {
+            if (!flag) { // 之前没有插入合并后的区间
                 ret.emplace_back(vector<int>{l, r});
                 flag = true;
             }
@@ -61,10 +61,13 @@ vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInter
 
 
 // 452 medium 射箭，<a,b>表示x轴的线段，最少从x轴向上射几根箭，可以戳爆所有线
-// 右边界排序
+// 右边界排序，下面这种情况是射两根，所以如果新的是重叠，不需要更新右边界
+// ------
+//   -------
+//         ---
 int findMinArrowShots(vector<vector<int>>& points) {
     sort(points.begin(), points.end(), [](vector<int> &p1, vector<int> &p2) {
-        return p1[1]<p2[1]; // 不需要考虑相等这种情况
+        return p1[1] < p2[1]; // 不需要考虑相等这种情况
     });
     int cnt = 1, r = points[0][1];
     for (int i = 1; i < points.size(); ++i) {
@@ -97,7 +100,7 @@ int eraseOverlapIntervals(vector<vector<int>>& intervals) {
 // 贪心思想：每次遇到当前区间最远的右边界就结束当前区间
 vector<int> partitionLabels(string s) {
     int pos[26];
-    for (int i = 0; i < s.size(); ++i) pos[s[i]-'a'] = i;
+    for (int i = 0; i < s.size(); ++i) pos[s[i]-'a'] = i; // 初始化最远右边界
     int l = 0, r = 0;
     vector<int> ret;
     for (int i = 0; i < s.size(); ++i) {
@@ -128,7 +131,7 @@ vector<vector<int>> intervalIntersection(vector<vector<int>>& firstList, vector<
 }
 
 
-// 630 <x,y>表示每个任务的时长和deadline，问最多完成几个任务
+// 630 hard <x,y>表示每个任务的时长和deadline，问最多完成几个任务
 // 因为任务可以任意时间开始（完成任务之间不存在间隔），所以遇到完成不了的短任务，可以将其与之前完成的长任务置换
 // 因此需要一个数据结构保存之前完成的任务时长
 int scheduleCourse(vector<vector<int>>& courses) {
